@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TechLudo – Hogwarts Code Quest</title>
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=EB+Garamond:wght@400;500;600&display=swap">
+  <style>
+    /* Hogwarts theme: candle-lit dark, parchment text, gold accents. Minimal on purpose. */
+    :root {
+      color-scheme: dark;
+      --bg: #0c0b10;
+      --panel: #15131b;
+      --panel2: #1d1a26;
+      --line: rgba(201, 162, 75, .24);
+      --line2: rgba(201, 162, 75, .5);
+      --text: #ece3cf;
+      --muted: #9a8f78;
+      --gold: #c9a24b;
+      --gold2: #e6c878;
+      --red: #b3354a;
+      --green: #3f9b6a;
+      --head: 'Cinzel', 'Trajan Pro', 'Palatino Linotype', Georgia, serif;
+      --body: 'EB Garamond', 'Palatino Linotype', Georgia, serif;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font: 18px/1.5 var(--body);
+      background: radial-gradient(ellipse at 50% -10%, rgba(201, 162, 75, .14), transparent 55%), var(--bg);
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--head);
+      font-weight: 700;
+      letter-spacing: .04em;
+      margin: 0 0 .5em;
+      line-height: 1.2
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 3rem);
+      color: var(--gold2)
+    }
+
+    h2 {
+      font-size: 1.3rem
+    }
+
+    h3 {
+      font-size: 1rem;
+      color: var(--gold)
+    }
+
+    p {
+      margin: 0 0 .6em
+    }
+
+    p:last-child {
+      margin: 0
+    }
+
+    .sub {
+      color: var(--muted)
+    }
+
+    .eyebrow {
+      font: 500 .72rem var(--head);
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--gold)
+    }
+
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 48px
+    }
+
+    .narrow {
+      max-width: 620px
+    }
+
+    .hero {
+      text-align: center;
+      padding: 18px 0 22px
+    }
+
+    .hero p {
+      margin-top: .4em
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 16px
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center
+    }
+
+    .row.end {
+      justify-content: flex-end;
+      margin-top: 14px
+    }
+
+    .row.center {
+      justify-content: center
+    }
+
+    .err {
+      color: #ff8a9b;
+      min-height: 1.2em;
+      margin: 6px 0 0
+    }
+
+    /* buttons + inputs */
+    .btn {
+      font: 700 .85rem var(--head);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 11px 20px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(#dcb961, #b38b35);
+      color: #1a1405;
+      transition: filter .15s, transform .15s;
+    }
+
+    .btn:hover:not(:disabled) {
+      filter: brightness(1.1);
+      transform: translateY(-1px)
+    }
+
+    .btn:disabled {
+      opacity: .4;
+      cursor: not-allowed
+    }
+
+    .btn.ghost {
+      background: transparent;
+      color: var(--gold2);
+      border-color: var(--line2)
+    }
+
+    .btn.sm {
+      padding: 6px 12px;
+      font-size: .72rem
+    }
+
+    .btn.big {
+      width: 100%;
+      padding: 14px
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      font: inherit;
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus,
+    .btn:focus-visible,
+    .opt:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px
+    }
+
+    /* tables */
+    table {
+      width: 100%;
+      border-collapse: collapse
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    th {
+      font: 500 .7rem var(--head);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--gold)
+    }
+
+    td.num,
+    th.num {
+      text-align: right
+    }
+
+    tr:last-child td {
+      border-bottom: 0
+    }
+
+    .tbl {
+      overflow-x: auto;
+      padding: 8px 12px
+    }
+
+    /* home */
+    .menu {
+      display: grid;
+      gap: 10px;
+      max-width: 420px;
+      margin: 0 auto 16px
+    }
+
+    .foot {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px
+    }
+
+    .dbs {
+      text-align: center;
+      font-size: .85rem;
+      color: var(--muted);
+      margin-top: 16px
+    }
+
+    .rules {
+      margin: 0;
+      padding-left: 1.2em;
+      color: var(--muted)
+    }
+
+    .rules li {
+      margin: .25em 0
+    }
+
+    /* game */
+    .game {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      gap: 16px;
+      align-items: start
+    }
+
+    .hud {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px 10px;
+      text-align: center;
+      background: var(--panel2)
+    }
+
+    .stat small {
+      display: block;
+      font: 500 .62rem var(--head);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted)
+    }
+
+    .stat strong {
+      font: 700 1.1rem var(--head);
+      color: var(--gold2)
+    }
+
+    .hearts {
+      color: #d0475a;
+      letter-spacing: 2px
+    }
+
+    .hearts .x {
+      color: #3b3646
+    }
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px
+    }
+
+    .tile {
+      position: relative;
+      aspect-ratio: 1;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel2);
+    }
+
+    [data-c=Cpp] {
+      --cc: #3f9b6a
+    }
+
+    [data-c=CS] {
+      --cc: #d0475a
+    }
+
+    [data-c=Logic] {
+      --cc: #f1edf8
+    }
+
+    [data-c=FAST] {
+      --cc: #4a86e8
+    }
+
+    .tile[data-c] {
+      border-color: var(--cc);
+      background: color-mix(in srgb, var(--cc) 20%, var(--panel2))
+    }
+
+    .tag[data-c] {
+      border-color: var(--cc)
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 16px;
+      margin-top: 12px;
+      font-size: .8rem;
+      color: var(--muted)
+    }
+
+    .lg {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .lg i {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+      background: var(--cc);
+      border: 1px solid rgba(255, 255, 255, .35)
+    }
+
+    .tile .n {
+      position: absolute;
+      top: 3px;
+      left: 6px;
+      font: normal .68rem var(--head);
+      color: var(--muted)
+    }
+
+    .tile.fin {
+      border-color: var(--gold);
+      background: rgba(201, 162, 75, .22);
+      box-shadow: 0 0 14px rgba(201, 162, 75, .25)
+    }
+
+    .tile.fin .n {
+      color: var(--gold2)
+    }
+
+    .tokens {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center
+    }
+
+    .tokens.start {
+      position: static;
+      width: 36px;
+      height: 36px
+    }
+
+    .startbox {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      color: var(--muted);
+      font: 500 .7rem var(--head);
+      letter-spacing: .2em;
+      text-transform: uppercase
+    }
+
+    .tok {
+      width: 62%;
+      max-width: 36px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font: 700 .9rem var(--head);
+      color: #1a1405;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .6), 0 0 0 2px rgba(255, 240, 200, .25);
+      background: radial-gradient(circle at 35% 30%, #f6e2a4, #b58a30);
+    }
+
+    .tokens.start .tok {
+      width: 100%;
+      max-width: none
+    }
+
+    .tok.hop {
+      animation: hop .22s ease
+    }
+
+    @keyframes hop {
+      50% {
+        transform: translateY(-8px) scale(1.1)
+      }
+    }
+
+    .die {
+      font-size: 4.4rem;
+      line-height: 1.1;
+      text-align: center;
+      color: var(--gold2)
+    }
+
+    .die.roll {
+      animation: shake .18s infinite
+    }
+
+    @keyframes shake {
+      25% {
+        transform: rotate(-8deg)
+      }
+
+      75% {
+        transform: rotate(8deg)
+      }
+    }
+
+    .msg {
+      text-align: center;
+      color: var(--muted);
+      min-height: 1.5em;
+      margin: 6px 0 14px
+    }
+
+    .side .btn.ghost {
+      margin-top: 8px;
+      width: 100%
+    }
+
+    /* question modal */
+    .ov {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      background: rgba(5, 4, 8, .8)
+    }
+
+    .dlg {
+      width: min(640px, 100%);
+      max-height: 94vh;
+      overflow: auto;
+      background: var(--panel);
+      border: 1px solid var(--line2);
+      border-radius: 14px;
+      padding: 22px
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 12px
+    }
+
+    .tag {
+      font: 500 .68rem var(--head);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--gold2);
+      border: 1px solid var(--line2);
+      border-radius: 99px;
+      padding: 3px 10px
+    }
+
+    .timer {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px
+    }
+
+    .tnum {
+      font: 700 1.4rem var(--head);
+      color: var(--gold2);
+      min-width: 2ch;
+      text-align: right
+    }
+
+    .tnum.low {
+      color: #ff8a9b
+    }
+
+    .tbar {
+      flex: 1;
+      height: 5px;
+      background: rgba(255, 255, 255, .08);
+      border-radius: 5px;
+      overflow: hidden
+    }
+
+    .tbar i {
+      display: block;
+      height: 100%;
+      width: 100%;
+      background: var(--gold)
+    }
+
+    .tbar.low i {
+      background: var(--red)
+    }
+
+    .q {
+      font-size: 1.15rem;
+      margin-bottom: 10px
+    }
+
+    pre {
+      margin: 0 0 14px;
+      padding: 12px 14px;
+      overflow-x: auto;
+      background: #0a090e;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      font: .88rem/1.5 ui-monospace, Consolas, Menlo, monospace;
+      color: #e8dcc0
+    }
+
+    .opt {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 11px 14px;
+      text-align: left;
+      font: inherit;
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .opt:hover:not(:disabled) {
+      border-color: var(--gold)
+    }
+
+    .opt kbd {
+      font: 600 .75rem var(--head);
+      color: var(--gold);
+      border: 1px solid var(--line2);
+      border-radius: 5px;
+      padding: 1px 7px
+    }
+
+    .opt:disabled {
+      cursor: default
+    }
+
+    .opt.off {
+      opacity: .3
+    }
+
+    .opt.r {
+      border-color: var(--green);
+      background: rgba(63, 155, 106, .18)
+    }
+
+    .opt.w {
+      border-color: var(--red);
+      background: rgba(179, 53, 74, .2)
+    }
+
+    .fb {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--line)
+    }
+
+    .fb.ok {
+      border-color: var(--green)
+    }
+
+    .fb.bad {
+      border-color: var(--red)
+    }
+
+    .fb strong {
+      font: 700 .95rem var(--head);
+      letter-spacing: .05em;
+      color: var(--gold2)
+    }
+
+    .fb .loss {
+      color: #ff8a9b
+    }
+
+    /* results, admin forms */
+    .results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px;
+      text-align: center
+    }
+
+    .results div {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 12px 6px;
+      background: var(--panel2)
+    }
+
+    .results small {
+      display: block;
+      font: 500 .65rem var(--head);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--muted)
+    }
+
+    .results strong {
+      font: 700 1.5rem var(--head);
+      color: var(--gold2)
+    }
+
+    .form label {
+      display: block;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    .form label>* {
+      margin-top: 4px
+    }
+
+    .f2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin: 12px 0
+    }
+
+    .bar select {
+      width: auto
+    }
+
+    .bar input {
+      flex: 1;
+      min-width: 160px
+    }
+
+    .chip {
+      font-size: .8rem;
+      color: var(--gold2);
+      border: 1px solid var(--line2);
+      border-radius: 99px;
+      padding: 1px 9px;
+      white-space: nowrap
+    }
+
+    /* toast + sparkles */
+    #toast {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      transform: translateX(-50%);
+      z-index: 80;
+      display: grid;
+      gap: 8px;
+      justify-items: center
+    }
+
+    .toast {
+      background: var(--panel2);
+      border: 1px solid var(--line2);
+      color: var(--gold2);
+      padding: 9px 16px;
+      border-radius: 99px;
+      font-size: .95rem
+    }
+
+    .conf {
+      position: fixed;
+      top: -2rem;
+      z-index: 70;
+      pointer-events: none;
+      animation: fall 3.6s linear forwards
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg)
+      }
+    }
+
+    @media (max-width: 820px) {
+      .game {
+        grid-template-columns: 1fr
+      }
+
+      .hud {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 16px
+      }
+
+      .dlg {
+        padding: 16px
+      }
+
+      .f2 {
+        grid-template-columns: 1fr
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <div id="modal"></div>
+  <div id="toast" aria-live="polite"></div>
+  <noscript>This game needs JavaScript enabled.</noscript>
+  <script>
+/* ===== BUILT-IN FALLBACK BANK (the MySQL database is used when available) =====
+   QUESTION BANK: [category, question, code|null, CORRECT, wrong, wrong, wrong, explanation]
+   Correct answer is listed first; the game shuffles the options. ===== */
+/*Q*/let Q = [
+      ["Cpp", "What is the output?", "int a = 10;\ncout << a++;\ncout << a;", "1011", "1111", "1010", "1110", "a++ yields the old value (10) first, then a becomes 11."],
+      ["Cpp", "What is the output?", "cout << 7 / 2.0;", "3.5", "3", "3.0", "4", "One operand is a double, so there is no integer division."],
+      ["Cpp", "What is the output?", "cout << 7 / 2 << \" \" << 7 % 2;", "3 1", "3.5 1", "4 1", "3 0", "Integer division gives 3 and % gives the remainder 1."],
+      ["Cpp", "What is the output?", "char s[] = \"Hello\";\ncout << sizeof(s);", "6", "5", "4", "8", "5 letters plus the '\\0' terminator."],
+      ["Cpp", "What is the output?", "for (int i = 0; i < 3; i++)\n    cout << i << \" \";", "0 1 2", "1 2 3", "0 1 2 3", "1 2", "i takes 0, 1, 2 and stops when it reaches 3."],
+      ["Cpp", "What is the output?", "int x = 3;\nif (x = 0) cout << \"A\";\nelse cout << \"B\";", "B", "A", "AB", "Compile error", "x = 0 assigns 0 (false), so the else branch runs. A classic bug."],
+      ["Cpp", "What is the output?", "int i = 5;\nwhile (i--)\n    cout << i;", "43210", "54321", "5432", "4321", "i-- tests the old value, then decrements before the body runs."],
+      ["Cpp", "What is the output?", "cout << 'A' + 1;", "66", "B", "A", "'B'", "'A' + 1 is an int (65 + 1), and cout prints ints as numbers. Unlike printf with %c, no char conversion happens."],
+      ["Cpp", "What is the output?", "char c = 'A';\nc++;\ncout << c;", "B", "66", "A", "'B'", "c stays a char, so cout prints the character B."],
+      ["Cpp", "What is the output?", "int x = 10;\nint *p = &x;\n*p = 20;\ncout << x;", "20", "10", "An address", "Error", "*p = 20 writes through the pointer into x."],
+      ["Cpp", "What is the output?", "string s = \"code\";\ncout << s.length();", "4", "5", "3", "8", "length() counts characters and not the terminator."],
+      ["Cpp", "What is the output?", "int a = 5;\nint &r = a;\nr = 9;\ncout << a;", "9", "5", "14", "Error", "A reference is another name for a, so assigning to r changes a."],
+      ["Cpp", "What is the output?", "cout << 10 / 4 << \" \" << 10 / 4.0;", "2 2.5", "2.5 2.5", "2 2", "3 2.5", "10 / 4 is integer division (2). 10 / 4.0 is floating point (2.5)."],
+      ["Cpp", "What is the output?", "bool b = 5;\ncout << b;", "1", "5", "0", "true", "Any non-zero value converts to true, and cout prints a bool as 1 (without boolalpha)."],
+      ["Cpp", "What is the output?", "int x = 5;\ncout << x / 2 * 2.0;", "4", "5", "2", "4.0", "x / 2 is 2 (integer), then 2 * 2.0 is the double 4, printed as 4."],
+      ["CS", "What is decimal 10 in binary?", null, "1010", "1001", "1100", "1110", "8 + 2 = 10, so the bits are 1010."],
+      ["CS", "What is the time complexity of binary search?", null, "O(log n)", "O(n)", "O(1)", "O(n²)", "Each step halves the search range."],
+      ["CS", "Which data structure is LIFO (last in, first out)?", null, "Stack", "Queue", "Array", "Tree", "Think of a stack of plates."],
+      ["CS", "Which data structure is FIFO (first in, first out)?", null, "Queue", "Stack", "Heap", "Binary tree", "The first element added is the first one removed, like a line at a counter."],
+      ["CS", "Which data structure gives O(1) average lookup by key?", null, "Hash table", "Linked list", "Sorted array", "Stack", "A hash function maps the key straight to a bucket."],
+      ["CS", "Which data structure does breadth-first search (BFS) use?", null, "Queue", "Stack", "Heap", "Hash table", "BFS explores level by level, so it needs FIFO order. DFS uses a stack."],
+      ["CS", "Which sorting algorithm has O(n log n) time even in the worst case?", null, "Merge sort", "Bubble sort", "Insertion sort", "Selection sort", "Merge sort always splits in half and merges in linear time."],
+      ["CS", "What does DNS do?", null, "Translates domain names to IP addresses", "Encrypts traffic", "Stores web pages", "Assigns MAC addresses", "It's the internet's phone book."],
+      ["CS", "What is the default port for HTTPS?", null, "443", "80", "21", "22", "80 = HTTP, 21 = FTP, 22 = SSH."],
+      ["CS", "Which Git command saves a snapshot of staged changes?", null, "git commit", "git push", "git clone", "git fork", "commit records; push uploads."],
+      ["CS", "Which is an example of supervised learning?", null, "Classifying emails as spam using labelled examples", "Grouping customers by similarity with no labels", "Compressing an image", "Defragmenting a disk", "Supervised learning trains on inputs paired with known labels."],
+      ["CS", "In machine learning, what is overfitting?", null, "The model memorises training data and does poorly on new data", "The model is too simple to learn anything", "Training finishes too quickly", "The dataset is too small to store", "An overfit model has low training error but high error on unseen data."],
+      ["CS", "What does the Turing Test try to measure?", null, "Whether a machine can behave indistinguishably from a human", "How fast a processor runs", "How much memory a computer has", "Whether code compiles", "Alan Turing proposed it as a test of machine intelligence."],
+      ["CS", "Which algorithm adjusts a neural network's weights using error gradients?", null, "Backpropagation", "Quick sort", "Dijkstra's algorithm", "Huffman coding", "Backpropagation pushes the error backwards to update each weight."],
+      ["CS", "What is phishing?", null, "Tricking people into revealing secrets using fake messages or sites", "Flooding a server with traffic", "Guessing passwords by brute force", "Encrypting files for ransom", "It's social engineering, usually via email or a cloned login page."],
+      ["CS", "Which defence best prevents SQL injection?", null, "Parameterised queries (prepared statements)", "Longer passwords", "Using HTTP instead of HTTPS", "Hiding the login button", "Parameters keep user input as data, never as SQL code."],
+      ["CS", "What does XSS stand for?", null, "Cross-Site Scripting", "Extra Style Sheets", "eXtended Server Security", "Cross-Server Syntax", "Attackers inject script that runs in other users' browsers."],
+      ["CS", "What does a firewall do?", null, "Filters network traffic using rules", "Compresses files", "Speeds up the CPU", "Recovers deleted data", "It allows or blocks packets based on configured rules."],
+      ["CS", "Which of these is a hash function rather than an encryption algorithm?", null, "SHA-256", "AES", "RSA", "Caesar cipher", "Hashes are one-way. Encryption can be reversed with a key."],
+      ["CS", "Which protocol encrypts HTTPS traffic?", null, "TLS", "FTP", "SMTP", "DHCP", "HTTPS is HTTP running over TLS."],
+      ["Logic", "Fill in the blank so it prints the first six Fibonacci numbers (0 1 1 2 3 5).", "int a = 0, b = 1;\nfor (int i = 0; i < 6; i++) {\n    cout << a << \" \";\n    int next = a + b;\n    a = b;\n    ____;\n}", "b = next", "b = a", "next = b", "a = next", "After a takes the old b, b must become the sum (next)."],
+      ["Logic", "Fill in the blank so fact(5) returns 120.", "int fact(int n) {\n    if (n <= 1) return 1;\n    return ____;\n}\nint main() {\n    cout << fact(5);\n}", "n * fact(n - 1)", "n * fact(n)", "fact(n - 1)", "n + fact(n - 1)", "n * fact(n) never shrinks and recurses forever. fact(n - 1) alone drops the multiplication."],
+      ["Logic", "Fill in the blank so the values are really swapped (prints 2 1).", "void swapVals(____) {\n    int t = a;\n    a = b;\n    b = t;\n}\nint main() {\n    int x = 1, y = 2;\n    swapVals(x, y);\n    cout << x << \" \" << y;\n}", "int &a, int &b", "int a, int b", "int *a, int *b", "const int &a, const int &b", "References alias the caller's variables. Pass by value only swaps copies."],
+      ["Logic", "Fill in the blank to reverse the array in place.", "int a[] = {1, 2, 3, 4, 5};\nint n = 5;\nfor (int i = 0; i < n / 2; i++) {\n    int t = a[i];\n    a[i] = a[____];\n    a[____] = t;\n}", "n - 1 - i", "n - i", "n - 1", "i - 1", "The mirror of index i is n - 1 - i. n - i would go out of bounds at i = 0."],
+      ["Logic", "Fill in the blank so the program prints the largest value (9).", "int a[] = {3, 9, 4, 7};\nint mx = a[0];\nfor (int i = 1; i < 4; i++)\n    if (____) mx = a[i];\ncout << mx;", "a[i] > mx", "a[i] < mx", "a[i] = mx", "mx > a[i]", "Update the maximum only when a larger element is found."],
+      ["Logic", "Fill in the blank so it counts the even numbers from 1 to 9 (prints 4).", "int count = 0;\nfor (int i = 1; i <= 9; i++)\n    if (____) count++;\ncout << count;", "i % 2 == 0", "i % 2 == 1", "i / 2 == 0", "i % 2", "i % 2 == 0 is true when there is no remainder. The other tests count the odd numbers (5) or the wrong things."],
+      ["Logic", "Fill in the blank so isPrime works correctly.", "bool isPrime(int n) {\n    if (n < 2) return false;\n    for (int i = 2; i * i <= n; i++)\n        if (____) return false;\n    return true;\n}", "n % i == 0", "n / i == 0", "i % n == 0", "n % i != 0", "If i divides n evenly, n has a divisor other than 1 and itself."],
+      ["Logic", "Fill in the blank so binary search finds 8 and prints its index, 3.", "int a[] = {2, 4, 6, 8, 10};\nint lo = 0, hi = 4, target = 8;\nwhile (lo <= hi) {\n    int mid = (lo + hi) / 2;\n    if (a[mid] == target) { cout << mid; break; }\n    else if (a[mid] < target) ____;\n    else hi = mid - 1;\n}", "lo = mid + 1", "lo = mid - 1", "hi = mid + 1", "mid = mid + 1", "a[mid] is too small, so the answer lies to the right of mid. The wrong choices loop forever."],
+      ["Logic", "Fill in the blank so bubble sort orders the array ascending (prints 2 3 4).", "int a[] = {4, 2, 3}, n = 3;\nfor (int i = 0; i < n - 1; i++)\n    for (int j = 0; j < n - 1 - i; j++)\n        if (____) swap(a[j], a[j + 1]);\nfor (int x : a) cout << x << \" \";", "a[j] > a[j + 1]", "a[j] < a[j + 1]", "a[j] == a[j + 1]", "a[j] > a[i]", "Swap neighbours that are out of order: the left one is bigger than the right one."],
+      ["Logic", "Fill in the blank to release memory allocated with new[].", "int *p = new int[4];\np[0] = 7;\ncout << p[0];\n____;", "delete[] p", "delete p", "free(p)", "p = nullptr", "Memory from new[] must be released with delete[]. Setting p = nullptr only leaks it."],
+      ["Logic", "Fill in the blank so the vector ends up with 4 elements.", "vector<int> v = {1, 2, 3};\nv.____(4);\ncout << v.size();", "push_back", "append", "add", "push", "push_back adds one element at the end of a std::vector."],
+      ["Logic", "Fill in the blank so the string prints backwards (CBA).", "string s = \"ABC\";\nfor (int i = ____; i >= 0; i--)\n    cout << s[i];", "s.size() - 1", "s.size()", "s.size() + 1", "0", "The last valid index is size() - 1. Index size() is past the end."],
+      ["Logic", "Fill in the blank so only Tue is printed.", "int d = 2;\nswitch (d) {\n    case 2: cout << \"Tue\";\n            ____;\n    case 3: cout << \"Wed\";\n}", "break", "continue", "stop", "exit", "Without break, switch falls through into the next case and prints Wed too."],
+      ["Logic", "Fill in the blank to print a triangle of 1, 2 and 3 stars.", "for (int i = 1; i <= 3; i++) {\n    for (int j = 1; j <= ____; j++)\n        cout << \"*\";\n    cout << \"\\n\";\n}", "i", "3", "j", "i + 1", "Row i must print i stars, so the inner loop runs up to i."],
+      ["Logic", "Fill in the blank to print the last element (30).", "int arr[] = {10, 20, 30};\nint *p = arr;\ncout << *(p + ____);", "2", "3", "1", "0", "p + 2 points to arr[2]. Pointer arithmetic moves in whole elements."],
+      ["Logic", "Fill in the blank to read a member through a pointer.", "struct Wizard { int year; };\nWizard w = {7};\nWizard *p = &w;\ncout << p____year;", "->", ".", "::", "=>", "Use -> with a pointer to a struct. The dot is for the object itself."],
+      ["FAST", "What does FAST stand for in FAST-NUCES?", null, "Foundation for Advancement of Science and Technology", "Federal Academy of Software and Technology", "Faculty of Applied Science and Telecom", "Forum for Advanced Studies and Training", "FAST is the sponsoring foundation behind the university."],
+      ["FAST", "What does NUCES stand for?", null, "National University of Computer and Emerging Sciences", "National Union of Computer Engineering Schools", "New University of Computing and Electronic Sciences", "National Unit for Computer Education Standards", "It was granted its charter as a university in 2000."],
+      ["FAST", "In which year was the FAST foundation established?", null, "1980", "1970", "1990", "2000", "FAST was set up in 1980. The university itself followed in 2000."],
+      ["FAST", "In which year did FAST receive its federal charter as a university?", null, "2000", "1980", "1990", "2010", "It was chartered in July 2000 as the National University of Computer and Emerging Sciences."],
+      ["FAST", "FAST-NUCES was originally known as?", null, "FAST Institute of Computer Science", "Karachi Institute of Technology", "National Institute of Computing", "Pakistan Computer College", "The name changed when it became a chartered university."],
+      ["FAST", "In which Karachi area is the FAST-NUCES main campus?", null, "Shah Latif Town", "Clifton", "Gulshan-e-Iqbal", "Saddar", "Sector 17-D, Shah Latif Town."],
+      ["FAST", "On which highway is the FAST Karachi main campus located?", null, "National Highway", "Super Highway", "Northern Bypass", "Lyari Expressway", "It lies east of Karachi's airport along the National Highway."],
+      ["FAST", "In which Karachi neighbourhood is the FAST city campus?", null, "PECHS (Block 6)", "North Nazimabad", "Korangi", "Defence Phase 8", "The city campus is at 22-G, Block-6, PECHS."],
+      ["FAST", "What is the yearly flagship tech event of FAST-NUCES Karachi, running since 1998?", null, "PROCOM", "SOFTEC", "Geek Week", "TechFest", "SOFTEC is the Lahore campus event."],
+      ["FAST", "Which campus hosts the annual SOFTEC event?", null, "Lahore", "Karachi", "Islamabad", "Peshawar", "SOFTEC has been held at the Lahore campus since 1995, while PROCOM is Karachi's event."],
+      ["FAST", "Where is the central administration of the National University based?", null, "Islamabad", "Karachi", "Lahore", "Peshawar", "The head office is FAST House, Rohtas Road, G-9/4, Islamabad."],
+      ["FAST", "Which FAST-NUCES campus was its first residential campus, with hostels inside?", null, "Chiniot-Faisalabad", "Karachi", "Peshawar", "Lahore", "It is the university's fifth campus."],
+      ["FAST", "Which of these undergraduate degrees is offered at FAST-NUCES Karachi?", null, "BS Computer Science", "MBBS", "LLB", "BArch", "FAST Karachi offers BSCS, BSEE and BSBA, plus other computing programmes."]
+    ];/*ENDQ*/
+
+    /* ===== helpers ===== */
+    const $ = s => document.querySelector(s), sleep = ms => new Promise(r => setTimeout(r, ms));
+    const h = (t, a = {}, ...k) => {const e = document.createElement(t); for (const [x, v] of Object.entries(a)) {if (x === 'class') e.className = v; else if (x.startsWith('on')) e[x] = v; else if (v != null && v !== false) e.setAttribute(x, v)} k.flat().forEach(c => c != null && e.append(c)); return e};
+    const ld = (k, d) => {try {return JSON.parse(localStorage.getItem(k)) ?? d} catch {return d} };
+    const sv = (k, v) => {try {localStorage.setItem(k, JSON.stringify(v))} catch { } };
+    const rnd = n => crypto.getRandomValues(new Uint32Array(1))[0] % n;
+    const shuffle = a => {for (let i = a.length - 1; i > 0; i--) {const j = rnd(i + 1);[a[i], a[j]] = [a[j], a[i]]} return a};
+
+    const CATS = ['Cpp', 'CS', 'Logic', 'FAST'];
+    const NU_RE = /^\d{2}[KLIMFP]-\d{4}$/;
+    const CN = {Cpp: 'C++ Output', CS: 'General CS · DS · AI · Security', Logic: 'Code Logic · Missing Line', FAST: 'FAST-NUCES Karachi'};
+    /* tile colours repeat every 12 tiles: Cpp = green, CS = red, Logic = white, FAST = blue */
+    const PATTERN = ['Cpp', 'CS', 'Cpp', 'Logic', 'CS', 'Cpp', 'FAST', 'Logic', 'Cpp', 'CS', 'Logic', 'FAST'];
+    const catOf = k => PATTERN[(k - 1) % PATTERN.length];
+    const N = 36, COLS = 6, SECS = 15, LIVES = 3, KEY = 'tl.save3', DIE = '⚀⚁⚂⚃⚄⚅';
+    let S, busy = false, T = {}, cfg = Object.assign({sound: true, name: ''}, ld('tl.cfg', {}));
+
+    /* ===== database API (api.php on XAMPP) ===== */
+    let DB = false;
+    async function api(a, body) {
+      const r = await fetch('api.php?a=' + a, body ? {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)} : {});
+      let j; try {j = await r.json()} catch {throw new Error('Server not reachable')} if (!r.ok || j.error) throw new Error(j.error || 'Server error'); return j
+    }
+    async function loadQ() {const j = await api('questions'); if (j.questions.length) Q = j.questions.map(q => [q.category, q.text, q.code || null, q.correct, q.w1, q.w2, q.w3, q.explanation || ''])}
+    async function boot() {try {await loadQ(); DB = true} catch {DB = false} home()}
+
+    /* ===== sound ===== */
+    let ac; const beep = (f, d = .12, t = 'sine') => {if (!cfg.sound) return; try {ac = ac || new AudioContext(); const o = ac.createOscillator(), g = ac.createGain(); o.type = t; o.frequency.value = f; g.gain.value = .07; o.connect(g); g.connect(ac.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + d); o.stop(ac.currentTime + d)} catch { } };
+    const sfx = {roll: () => beep(300, .05, 'square'), hop: () => beep(520, .06), ok: () => {beep(660, .12); setTimeout(() => beep(880, .18), 110)}, bad: () => beep(200, .3, 'sawtooth'), win: () => [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => beep(f, .25), i * 140))};
+    function toast(m) {const t = h('div', {class: 'toast'}, m); $('#toast').append(t); setTimeout(() => t.remove(), 2600)}
+    function confetti() {for (let i = 0; i < 40; i++) {const c = h('span', {class: 'conf'}, '✨⭐'[rnd(2)]); c.style.left = rnd(100) + 'vw'; c.style.animationDelay = (rnd(15) / 10) + 's'; document.body.append(c); setTimeout(() => c.remove(), 5000)} }
+    function modal(...k) {const m = h('div', {class: 'ov', role: 'dialog', 'aria-modal': 'true'}, h('div', {class: 'dlg'}, ...k)); $('#modal').append(m); return () => m.remove()}
+    const view = (...k) => {$('#app').replaceChildren(...k); window.scrollTo(0, 0)};
+    const save = () => sv(KEY, S);
+    const hearts = n => h('span', {class: 'hearts', 'aria-label': n + ' lives'}, '♥'.repeat(Math.max(0, n)), h('span', {class: 'x'}, '♥'.repeat(Math.max(0, LIVES - n))));
+
+    /* leaderboard when the database is offline: best run per player, by score then fewest turns */
+    const topRuns = rs => {const seen = new Set(); return rs.slice().sort((a, b) => b.score - a.score || a.turns - b.turns).filter(r => {const k = r.name.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true}).slice(0, 5)};
+
+    /* ===== home ===== */
+    async function home() {
+      const sd = ld(KEY, null), saved = sd && sd.v === 2 && !sd.over ? sd : null; let lb = [];
+      if (DB) {try {lb = (await api('leaderboard')).players} catch { } } else lb = topRuns(ld('tl.runs', []));
+      const name = h('input', {value: cfg.name || '', maxlength: 14, placeholder: 'Your name', 'aria-label': 'Your name', autocomplete: 'off'});
+      const nu = h('input', {maxlength: 8, placeholder: 'NU ID (e.g. 26K-3058)', 'aria-label': 'NU ID', autocomplete: 'off', autocapitalize: 'characters', spellcheck: 'false', oninput: e => {e.target.value = e.target.value.toUpperCase()}});
+      const nuErr = h('p', {class: 'err', role: 'alert'}); let starting = false;
+      const start = async () => {
+        if (starting) return;
+        const nm = name.value.trim() || 'Wizard', id = nu.value.trim().toUpperCase();
+        if (!NU_RE.test(id)) {nuErr.textContent = 'Enter your NU ID like 26K-3058.'; nu.focus(); return}
+        nuErr.textContent = ''; starting = true;
+        if (DB) {try {await api('nu_start', {name: nm, nu_id: id})} catch (e) {nuErr.textContent = e.message; starting = false; return} }
+        starting = false; cfg.name = nm; sv('tl.cfg', cfg); newGame(nm, id)
+      };
+      name.onkeydown = nu.onkeydown = e => {if (e.key === 'Enter') start()};
+      view(h('main', {class: 'wrap narrow'},
+        h('header', {class: 'hero'}, h('span', {class: 'eyebrow'}, 'A Hogwarts code quest'), h('h1', {}, 'TechLudo'), h('p', {class: 'sub'}, 'Roll the dice. Answer the riddle. Reach the Great Hall.')),
+        h('section', {class: 'menu'},
+          saved ? h('button', {class: 'btn', onclick: () => resume(saved)}, `Continue · ${saved.name} · tile ${saved.pos}/${N}`) : null,
+          name, nu, nuErr, h('button', {class: 'btn' + (saved ? ' ghost' : ''), onclick: start}, saved ? 'New game' : 'Begin'),
+          h('p', {class: 'sub'}, 'One attempt per NU ID.')),
+        h('section', {class: 'panel'}, h('h3', {}, 'Hall of Fame'),
+          lb.length ? h('table', {}, h('thead', {}, h('tr', {}, h('th', {}, '#'), h('th', {}, 'Wizard'), h('th', {class: 'num'}, 'Score'), h('th', {class: 'num'}, 'Turns'))),
+            h('tbody', {}, lb.map((p, i) => h('tr', {}, h('td', {}, i + 1), h('td', {}, p.name), h('td', {class: 'num'}, p.score), h('td', {class: 'num'}, p.turns)))))
+            : h('p', {class: 'sub'}, 'No scores yet. Be the first!')),
+        h('section', {class: 'panel'}, h('h3', {}, 'How to play'),
+          h('ul', {class: 'rules'},
+            h('li', {}, `Roll the dice and answer the question within ${SECS} seconds.`),
+            h('li', {}, 'Correct: +10 points (+15 for code questions). Three in a row: +10 bonus.'),
+            h('li', {}, 'Wrong answer or timeout: you go back and lose a life. You have 3.'),
+            h('li', {}, 'Tile colour sets the topic: green = C++ output, red = general CS / data structures / AI / security, white = code logic (missing line), blue = FAST-NUCES Karachi trivia.'),
+            h('li', {}, `Land exactly on tile ${N} to reach the Great Hall. A six gives a bonus roll.`))),
+        h('div', {class: 'foot'},
+          h('button', {class: 'btn ghost sm', onclick: adminEntry}, 'Question bank'),
+          h('button', {class: 'btn ghost sm', onclick: () => {cfg.sound = !cfg.sound; sv('tl.cfg', cfg); home()}}, cfg.sound ? 'Sound on' : 'Sound off')),
+        h('p', {class: 'dbs'}, DB ? 'Database connected' : 'Database offline: open http://localhost/techludo/ with Apache and MySQL running. Scores are kept in this browser meanwhile.')))
+    }
+
+    /* ===== admin: question bank + players (passkey protected) ===== */
+    async function adminEntry() {
+      if (!DB) {toast('Database offline. Start Apache and MySQL in XAMPP.'); return }
+      let ok = false; try {ok = (await api('me')).admin} catch { }
+      ok ? bank() : login()
+    }
+    function login() {
+      const inp = h('input', {type: 'password', placeholder: 'Admin passkey', 'aria-label': 'Admin passkey', autocomplete: 'current-password'}), err = h('p', {class: 'err', role: 'alert'});
+      const go = async () => {try {await api('login', {key: inp.value}); close(); bank()} catch (e) {err.textContent = e.message; inp.select()} };
+      inp.onkeydown = e => {if (e.key === 'Enter') go()};
+      const close = modal(h('h2', {}, 'Admin login'), h('p', {class: 'sub'}, 'Enter the passkey to manage the question bank.'), inp, err,
+        h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => close()}, 'Cancel'), h('button', {class: 'btn', onclick: go}, 'Unlock'))); inp.focus()
+    }
+
+    async function bank() {
+      let qs, ps; try {qs = (await api('q_list')).questions; ps = (await api('players')).players} catch (e) {if (/log in/i.test(e.message)) return login(); toast(e.message); return home()}
+      let cat = 'All', term = '';
+      const tb = h('tbody'), count = h('span', {class: 'sub'});
+      const rows = () => {
+        const f = qs.filter(q => (cat === 'All' || q.category === cat) && (!term || (q.text + q.correct + (q.code || '')).toLowerCase().includes(term)));
+        count.textContent = f.length + ' of ' + qs.length + ' questions';
+        tb.replaceChildren(...f.map(q => h('tr', {}, h('td', {}, q.id), h('td', {}, h('span', {class: 'chip'}, CN[q.category] || q.category)),
+          h('td', {}, q.text, q.code ? h('small', {class: 'sub'}, ' · has code') : null), h('td', {}, q.correct),
+          h('td', {}, h('button', {class: 'btn ghost sm', onclick: () => qform(q)}, 'Edit'), ' ', h('button', {class: 'btn ghost sm', 'aria-label': 'Delete', onclick: () => del(q)}, 'Delete')))))
+      };
+      const refresh = async () => {try {await loadQ()} catch { } bank()};
+      const del = q => {
+        const c = modal(h('h2', {}, 'Delete question #' + q.id + '?'), h('p', {}, q.text), h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => c()}, 'Cancel'),
+          h('button', {class: 'btn', onclick: async () => {try {await api('q_delete', {id: q.id}); c(); toast('Deleted'); refresh()} catch (e) {toast(e.message)} }}, 'Delete')))
+      };
+      const qform = q => {
+        const f = {}, fld = (k, l, tag = 'input') => {f[k] = h(tag, {maxlength: k === 'text' ? 500 : k === 'code' ? 2000 : 200}); f[k].value = q ? (q[k] ?? '') : ''; return h('label', {}, l, f[k])};
+        f.category = h('select', {}, CATS.map(c => h('option', {value: c}, CN[c]))); f.category.value = q ? q.category : 'Cpp'; const err = h('p', {class: 'err', role: 'alert'});
+        const send = async () => {
+          const body = {id: q?.id}; for (const k of ['category', 'text', 'code', 'correct', 'w1', 'w2', 'w3', 'explanation']) body[k] = f[k].value;
+          try {await api(q ? 'q_update' : 'q_add', body); c(); toast(q ? 'Question updated' : 'Question added'); refresh()} catch (e) {err.textContent = e.message}
+        };
+        const c = modal(h('h2', {}, q ? 'Edit question #' + q.id : 'Add question'), h('div', {class: 'form'}, h('label', {}, 'Category', f.category), fld('text', 'Question', 'textarea'), fld('code', 'Code snippet (optional). For fill-in-the-blank use ____ as the blank.', 'textarea'),
+          fld('correct', 'Correct answer'), h('div', {class: 'f2'}, fld('w1', 'Wrong option 1'), fld('w2', 'Wrong option 2')), fld('w3', 'Wrong option 3'), fld('explanation', 'Explanation (shown after answering)')), err,
+          h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => c()}, 'Cancel'), h('button', {class: 'btn', onclick: send}, q ? 'Save changes' : 'Add question')))
+      };
+      const chPass = () => {
+        const k = h('input', {type: 'password', placeholder: 'New passkey (min 6 chars)', autocomplete: 'new-password'}), e = h('p', {class: 'err'});
+        const c = modal(h('h2', {}, 'Change admin passkey'), k, e, h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => c()}, 'Cancel'),
+          h('button', {class: 'btn', onclick: async () => {try {await api('set_key', {key: k.value}); c(); toast('Passkey changed')} catch (x) {e.textContent = x.message} }}, 'Save')))
+      };
+      const delP = p => {
+        const c = modal(h('h2', {}, 'Delete player ' + p.name + '?'), h('p', {}, 'Their stats and game history will be removed, and this NU ID can play again.'), h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => c()}, 'Cancel'),
+          h('button', {class: 'btn', onclick: async () => {try {await api('player_delete', {id: p.id}); c(); bank()} catch (e) {toast(e.message)} }}, 'Delete')))
+      };
+      const sc = h('select', {'aria-label': 'Category filter', onchange: e => {cat = e.target.value; rows()}}, h('option', {value: 'All'}, 'All categories'), CATS.map(c => h('option', {value: c}, CN[c])));
+      const se = h('input', {type: 'search', placeholder: 'Search questions…', 'aria-label': 'Search', oninput: e => {term = e.target.value.toLowerCase(); rows()}});
+      view(h('main', {class: 'wrap'}, h('div', {class: 'row'}, h('button', {class: 'btn ghost sm', onclick: home}, '← Menu'), h('button', {class: 'btn ghost sm', onclick: chPass}, 'Change passkey'),
+        h('button', {class: 'btn ghost sm', onclick: async () => {await api('logout'); toast('Logged out'); home()}}, 'Log out')),
+        h('h1', {style: 'margin-top:16px'}, 'Question Bank'), h('div', {class: 'bar'}, sc, se, h('button', {class: 'btn', onclick: () => qform(null)}, 'Add question')), count,
+        h('div', {class: 'panel tbl'}, h('table', {}, h('thead', {}, h('tr', {}, ['ID', 'Topic', 'Question', 'Correct answer', ''].map(x => h('th', {}, x)))), tb)),
+        h('h2', {style: 'margin-top:22px'}, 'Players'),
+        h('div', {class: 'panel tbl'}, ps.length ? h('table', {}, h('thead', {}, h('tr', {}, ['Name', 'NU ID', 'Games', 'Wins', 'Best', 'Total', 'Right', 'Wrong', ''].map(x => h('th', {}, x)))),
+          h('tbody', {}, ps.map(p => h('tr', {}, h('td', {}, p.name), h('td', {}, p.nu_id || '-'), h('td', {}, p.games), h('td', {}, p.wins), h('td', {}, p.best_score), h('td', {}, p.total_score), h('td', {}, p.correct), h('td', {}, p.wrong), h('td', {}, h('button', {class: 'btn ghost sm', 'aria-label': 'Delete player', onclick: () => delP(p)}, 'Delete')))))) : h('p', {class: 'sub'}, 'No players yet. They appear as soon as someone starts a game with their NU ID.'))));
+      rows()
+    }
+
+    /* ===== game state ===== */
+    function newGame(name, nu) {
+      S = {v: 2, name, nu, pos: 0, score: 0, ok: 0, bad: 0, streak: 0, ll: 1, lives: LIVES, turn: 1, used: [], over: false, won: false, lost: false, pend: null};
+      save(); game()
+    }
+
+    /* Leaving the page while a question is open counts as a timeout (so a refresh can't dodge the penalty). */
+    function resume(sd) {
+      S = sd;
+      if (S.pend) {
+        S.pos = S.pend.from; S.pend = null; S.bad++; S.streak = 0; S.lives--;
+        if (S.lives <= 0) {S.over = true; S.lost = true; record(); return finish()}
+        S.turn++; save(); toast('You left mid-question: counted as a timeout, −1 life')
+      }
+      game()
+    }
+
+    /* store the finished run: database when online, this browser otherwise */
+    function record() {
+      try {localStorage.removeItem(KEY)} catch { }
+      if (S.ok + S.bad === 0) return;
+      if (DB && S.nu) api('game_end', {mode: 'solo', turns: S.turn, players: [{name: S.name, nu_id: S.nu, score: S.score, ok: S.ok, bad: S.bad, won: S.won}]}).catch(() => toast('Could not save the score to the database'));
+      else {const rs = ld('tl.runs', []); rs.push({name: S.name, score: S.score, turns: S.turn}); sv('tl.runs', rs.sort((a, b) => b.score - a.score || a.turns - b.turns).slice(0, 100))}
+    }
+
+    /* ===== board ===== */
+    function tilePos(k) {const rows = Math.ceil(N / COLS), i = k - 1, r = Math.floor(i / COLS); let c = i % COLS; if (r % 2) c = COLS - 1 - c; return {r: rows - r, c: c + 1}}
+    const place = pos => (pos ? T[pos] : T.start).append(T.tok);
+    const hop = () => {T.tok.classList.remove('hop'); void T.tok.offsetWidth; T.tok.classList.add('hop')};
+
+    function game() {
+      busy = false; T = {};
+      const board = h('div', {class: 'board', role: 'img', 'aria-label': 'Game board'});
+      for (let k = 1; k <= N; k++) {
+        const {r, c} = tilePos(k), hold = h('div', {class: 'tokens'});
+        T[k] = hold; board.append(h('div', {class: 'tile' + (k === N ? ' fin' : ''), 'data-c': catOf(k), style: `grid-row:${r};grid-column:${c}`, title: (k === N ? 'The Great Hall' : 'Tile ' + k) + ' · ' + CN[catOf(k)]}, h('i', {class: 'n'}, k), hold))
+      }
+      T.start = h('div', {class: 'tokens start'});
+      T.tok = h('div', {class: 'tok', title: S.name}, [...S.name][0].toUpperCase()); place(S.pos);
+      T.hud = h('div', {class: 'hud'}); T.die = h('div', {class: 'die', role: 'img', 'aria-label': 'Dice'}, '⚅'); T.msg = h('p', {class: 'msg'}, 'Roll the dice to move.');
+      T.roll = h('button', {class: 'btn big', onclick: roll}, 'Roll dice');
+      T.menu = h('button', {class: 'btn ghost', onclick: home}, 'Menu (progress is saved)'); T.end = h('button', {class: 'btn ghost', onclick: endEarly}, 'End game');
+      view(h('main', {class: 'wrap'},
+        h('div', {class: 'game'},
+          h('section', {class: 'panel'}, T.hud, board, h('div', {class: 'startbox'}, T.start, 'Start · exact roll needed on tile ' + N),
+            h('div', {class: 'legend'}, CATS.map(c => h('span', {class: 'lg'}, h('i', {'data-c': c}), CN[c])))),
+          h('aside', {class: 'side'}, h('div', {class: 'panel'}, T.die, T.msg, T.roll), T.menu, T.end))));
+      paint()
+    }
+
+    function paint() {
+      T.hud.replaceChildren(...[['Lives', hearts(S.lives)], ['Score', S.score], ['Turn', S.turn], ['Tile', S.pos + '/' + N]].map(([k, v]) => h('div', {class: 'stat'}, h('small', {}, k), h('strong', {}, v))));
+      T.roll.disabled = busy || S.over; T.menu.disabled = busy; T.end.disabled = busy || S.over
+    }
+
+    async function roll() {
+      if (busy || S.over) return; busy = true; paint();
+      const d = 1 + rnd(6);
+      T.die.classList.add('roll'); const iv = setInterval(() => {T.die.textContent = DIE[rnd(6)]; sfx.roll()}, 90);
+      await sleep(800); clearInterval(iv); T.die.classList.remove('roll'); T.die.textContent = DIE[d - 1];
+      const from = S.pos, to = from + d; T.msg.textContent = `You rolled a ${d}.`;
+      if (to > N) {toast(`Exact roll needed: you need ${N - from} or less`); return endTurn(false)}
+      for (let k = from + 1; k <= to; k++) {S.pos = k; place(k); hop(); sfx.hop(); await sleep(220)}
+      await sleep(200);
+      S.pend = {from}; save();                 // question is open: leaving now counts as a timeout
+      const r = await ask(to, from);
+      if (!r.ok) {for (let k = to - 1; k >= from; k--) {place(k); hop(); await sleep(110)} }
+      paint();
+      if (S.over) return finish();
+      endTurn(r.ok && d === 6)
+    }
+
+    function endTurn(extra) {
+      if (extra) toast('You rolled a six. Roll again!'); else S.turn++;
+      busy = false; save(); T.msg.textContent = 'Roll the dice to move.'; paint()
+    }
+
+    function pick(cat) {
+      let pool = Q.map((_, i) => i).filter(i => Q[i][0] === cat && !S.used.includes(i));
+      if (!pool.length) {S.used = S.used.filter(i => Q[i][0] !== cat); pool = Q.map((_, i) => i).filter(i => Q[i][0] === cat)}
+      if (!pool.length) pool = Q.map((_, i) => i);
+      const i = pool[rnd(pool.length)]; S.used.push(i); return Q[i]
+    }
+
+    /* Shows a question. The result (points, or life lost) is applied the instant it is answered or the timer hits 0. */
+    function ask(tile, from) {
+      return new Promise(res => {
+        const cat = catOf(tile), [, text, code, ans, w1, w2, w3, ex] = pick(cat), pts = code ? 15 : 10;
+        const opts = shuffle([ans, w1, w2, w3]); let done = false, iv = null;
+        const num = h('strong', {class: 'tnum'}, SECS), bar = h('div', {class: 'tbar', role: 'progressbar', 'aria-label': 'Time remaining', 'aria-valuemin': 0, 'aria-valuemax': SECS, 'aria-valuenow': SECS}, h('i'));
+        const fb = h('div', {class: 'fb', hidden: true, 'aria-live': 'assertive'});
+        const bs = opts.map((o, i) => h('button', {class: 'opt', onclick: () => answer(i)}, h('kbd', {}, 'ABCD'[i]), h('span', {}, o)));
+        const ll = h('button', {
+          class: 'btn ghost sm', disabled: !S.ll, onclick: () => {
+            if (done || !S.ll) return; S.ll = 0; ll.disabled = true; ll.textContent = '50:50 used';
+            shuffle(bs.map((b, i) => i).filter(i => opts[i] !== ans)).slice(0, 2).forEach(i => {bs[i].disabled = true; bs[i].classList.add('off')})
+          }
+        }, S.ll ? '50:50 charm' : '50:50 used');
+        const key = e => {const i = '1234'.indexOf(e.key), j = 'abcd'.indexOf(e.key.toLowerCase()), k = i >= 0 ? i : j; if (k >= 0 && !bs[k].disabled) answer(k)};
+        document.addEventListener('keydown', key);
+        const close = modal(h('div', {class: 'tags'}, h('span', {class: 'tag', 'data-c': cat}, CN[cat]), h('span', {class: 'tag'}, '+' + pts + ' pts'), h('span', {class: 'tag'}, 'Tile ' + tile)),
+          h('div', {class: 'timer'}, h('div', {role: 'timer'}, num), bar), h('div', {class: 'q'}, text), code ? h('pre', {}, code) : null, h('div', {class: 'opts'}, bs), fb, h('div', {class: 'row end'}, ll));
+        const answer = i => {
+          if (done) return; done = true; clearInterval(iv);
+          const ok = i >= 0 && opts[i] === ans, late = i < 0; let bonus = false;
+          /* apply the result immediately: a timeout costs a life exactly like a wrong answer */
+          S.pend = null;
+          if (ok) {
+            S.score += pts; S.ok++; S.streak++;
+            if (S.streak % 3 === 0) {S.score += 10; bonus = true}
+            if (tile === N) {S.over = true; S.won = true}
+          } else {
+            S.bad++; S.streak = 0; S.lives--; S.pos = from;
+            if (S.lives <= 0) {S.over = true; S.lost = true}
+          }
+          if (S.over) record(); else save();
+          bs.forEach((b, k) => {b.disabled = true; if (opts[k] === ans) b.classList.add('r'); else if (k === i) b.classList.add('w')}); ll.disabled = true;
+          (ok ? sfx.ok : sfx.bad)(); fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+          const nb = h('button', {class: 'btn', onclick: () => {document.removeEventListener('keydown', key); close(); res({ok})}}, S.won ? 'Enter the Great Hall' : 'Continue');
+          fb.replaceChildren(h('strong', {}, ok ? `Correct · +${pts} points` : late ? "Time's up" : 'Not quite'),
+            ok ? null : h('p', {}, 'Answer: ' + ans),
+            ok ? null : h('p', {class: 'loss'}, S.lives > 0 ? `−1 life · ${S.lives} left` : 'No lives left'),
+            bonus ? h('p', {}, 'Three in a row · +10 bonus') : null,
+            h('p', {class: 'sub'}, ex), h('div', {class: 'row end'}, nb)); nb.focus()
+        };
+        const end = Date.now() + SECS * 1000;
+        iv = setInterval(() => {
+          const l = (end - Date.now()) / 1000, rem = Math.max(0, Math.ceil(l));
+          bar.firstChild.style.width = Math.max(0, l / SECS * 100) + '%'; bar.setAttribute('aria-valuenow', rem); num.textContent = rem;
+          bar.classList.toggle('low', l <= 5); num.classList.toggle('low', l <= 5);
+          if (l <= 0) answer(-1);
+        }, 100);
+      })
+    }
+
+    function endEarly() {
+      if (busy) return; const close = modal(h('h2', {}, 'End the game?'), h('p', {}, 'Your current score will still be saved to the Hall of Fame.'),
+        h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => close()}, 'Keep playing'), h('button', {class: 'btn', onclick: () => {close(); S.over = true; record(); finish()}}, 'End game')))
+    }
+
+    function finish() {
+      const w = S.won, t = S.ok + S.bad;
+      if (w) {sfx.win(); confetti()} else if (S.lost) sfx.bad();
+      view(h('main', {class: 'wrap narrow'},
+        h('header', {class: 'hero'}, h('span', {class: 'eyebrow'}, w ? 'Victory' : S.lost ? 'Defeat' : 'Quest ended'),
+          h('h1', {}, w ? 'The Great Hall awaits' : S.lost ? 'Out of lives' : 'Quest ended'),
+          h('p', {class: 'sub'}, w ? `${S.name}, you made it in ${S.turn} turns.` : S.lost ? `You fell on tile ${S.pos} of ${N}.` : `You stopped on tile ${S.pos} of ${N}.`)),
+        h('section', {class: 'panel'}, h('div', {class: 'results'}, [['Score', S.score], ['Turns', S.turn], ['Right', S.ok], ['Wrong', S.bad], ['Accuracy', t ? Math.round(S.ok / t * 100) + '%' : '—']].map(([k, v]) => h('div', {}, h('small', {}, k), h('strong', {}, v))))),
+        h('div', {class: 'row center'}, h('button', {class: 'btn', onclick: () => newGame(S.name)}, 'Play again'), h('button', {class: 'btn ghost', onclick: home}, 'Menu'))))
+    }
+
+    boot();
+  </script>
+</body>
+
+</html>
