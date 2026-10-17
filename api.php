@@ -62,18 +62,19 @@ try {
       session_regenerate_id(true); $_SESSION['admin'] = true; out(['ok' => true]);
     case 'logout': $_SESSION = []; session_destroy(); out(['ok' => true]);
     case 'leaderboard':
-      // Hall of Fame: each player's best run, ranked by score (higher first), then fewest turns.
+      // Hall of Fame: WINNERS ONLY. Each player's best winning run, ranked by score (higher first), then fewest turns. Top 10.
       $rows = $db->query('SELECT p.id pid, p.name, gp.score, g.turns
         FROM game_players gp
         JOIN games g ON g.id = gp.game_id
         JOIN players p ON p.id = gp.player_id
-        JOIN (SELECT player_id, MAX(score) ms FROM game_players GROUP BY player_id) b ON b.player_id = gp.player_id AND b.ms = gp.score
+        JOIN (SELECT player_id, MAX(score) ms FROM game_players WHERE won = 1 GROUP BY player_id) b ON b.player_id = gp.player_id AND b.ms = gp.score
+        WHERE gp.won = 1
         ORDER BY gp.score DESC, g.turns ASC, g.id ASC LIMIT 100')->fetchAll();
       $seen = []; $top = [];
       foreach ($rows as $r) {
         if (isset($seen[$r['pid']])) continue;
         $seen[$r['pid']] = 1; $top[] = ['name' => $r['name'], 'score' => (int)$r['score'], 'turns' => (int)$r['turns']];
-        if (count($top) >= 5) break;
+        if (count($top) >= 10) break;
       }
       out(['players' => $top]);
     case 'players':

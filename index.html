@@ -178,13 +178,15 @@
     input,
     select,
     textarea {
-      width: 100%;
+      width: 98%;
       font: inherit;
       color: var(--text);
       background: var(--panel2);
       border: 1px solid var(--line);
       border-radius: 8px;
-      padding: 10px 12px;
+      padding: 10px 13px;
+      margin-top: 5px;
+      margin-left: 4px;
     }
 
     input:focus,
@@ -771,10 +773,1699 @@
         transition: none !important
       }
     }
+
+    /* ============ ANIMATION & POLISH LAYER ============ */
+    body {
+      position: relative
+    }
+
+    #app {
+      position: relative;
+      z-index: 1
+    }
+
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(18px)
+      }
+    }
+
+    @keyframes fadein {
+      from {
+        opacity: 0
+      }
+    }
+
+    @keyframes fadeout {
+      to {
+        opacity: 0
+      }
+    }
+
+    @keyframes shimmer {
+      to {
+        background-position: -250% 0
+      }
+    }
+
+    /* ambient candle embers */
+    #embers {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 0
+    }
+
+    #embers i {
+      position: absolute;
+      bottom: -12px;
+      width: var(--s);
+      height: var(--s);
+      border-radius: 50%;
+      opacity: 0;
+      background: radial-gradient(circle, #fff1c2, #c9a24b 55%, transparent 72%);
+      animation: ember var(--d) linear var(--dl) infinite
+    }
+
+    @keyframes ember {
+      0% {
+        opacity: 0;
+        translate: 0 0
+      }
+
+      12% {
+        opacity: .85
+      }
+
+      100% {
+        opacity: 0;
+        translate: var(--x) -108vh
+      }
+    }
+
+    /* screens: staggered entrance */
+    .wrap>* {
+      animation: rise .55s cubic-bezier(.2, .7, .2, 1) backwards
+    }
+
+    .wrap> :nth-child(2) {
+      animation-delay: .07s
+    }
+
+    .wrap> :nth-child(3) {
+      animation-delay: .14s
+    }
+
+    .wrap> :nth-child(4) {
+      animation-delay: .21s
+    }
+
+    .wrap> :nth-child(5) {
+      animation-delay: .28s
+    }
+
+    .wrap> :nth-child(6) {
+      animation-delay: .35s
+    }
+
+    .wrap> :nth-child(n+7) {
+      animation-delay: .42s
+    }
+
+    .hero .eyebrow {
+      display: inline-block;
+      animation: rise .8s .05s backwards
+    }
+
+    .hero h1 {
+      background: linear-gradient(100deg, #c9a24b 25%, #fff3cf 42%, #c9a24b 60%);
+      background-size: 250% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rise .8s .15s backwards, shimmer 6s 1s linear infinite
+    }
+
+    .hero p {
+      animation: rise .8s .3s backwards
+    }
+
+    .defeat .hero h1 {
+      background: none;
+      color: #ff8a9b;
+      animation: rise .8s .15s backwards
+    }
+
+    .vict .hero h1 {
+      filter: drop-shadow(0 0 14px rgba(230, 200, 120, .55))
+    }
+
+    /* buttons */
+    .btn {
+      position: relative;
+      overflow: hidden;
+      transition: transform .15s, filter .15s, box-shadow .25s, background .2s, border-color .2s
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      transform: translateX(-130%);
+      background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .32) 50%, transparent 65%);
+      transition: transform .6s
+    }
+
+    .btn:hover:not(:disabled)::after {
+      transform: translateX(130%)
+    }
+
+    .btn:hover:not(:disabled) {
+      box-shadow: 0 6px 22px rgba(201, 162, 75, .28)
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(.96)
+    }
+
+    @keyframes glow {
+      50% {
+        box-shadow: 0 0 22px rgba(201, 162, 75, .6)
+      }
+    }
+
+    .btn.big:not(:disabled) {
+      animation: glow 2s ease-in-out infinite
+    }
+
+    input,
+    select,
+    textarea {
+      transition: border-color .2s, box-shadow .2s
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      box-shadow: 0 0 0 3px rgba(201, 162, 75, .18)
+    }
+
+    /* hall of fame rows */
+    .panel:not(.tbl) tbody tr {
+      animation: rise .45s backwards
+    }
+
+    .panel:not(.tbl) tbody tr:nth-child(1) {
+      animation-delay: .35s
+    }
+
+    .panel:not(.tbl) tbody tr:nth-child(2) {
+      animation-delay: .42s
+    }
+
+    .panel:not(.tbl) tbody tr:nth-child(3) {
+      animation-delay: .49s
+    }
+
+    .panel:not(.tbl) tbody tr:nth-child(4) {
+      animation-delay: .56s
+    }
+
+    .panel:not(.tbl) tbody tr:nth-child(5) {
+      animation-delay: .63s
+    }
+
+    .panel:not(.tbl) tbody tr:first-child td {
+      color: var(--gold2);
+      font-weight: 600;
+      text-shadow: 0 0 12px rgba(230, 200, 120, .4)
+    }
+
+    /* board */
+    @keyframes tilein {
+      from {
+        opacity: 0;
+        transform: scale(.4) rotate(-8deg)
+      }
+    }
+
+    .tile {
+      animation: tilein .5s cubic-bezier(.2, 1.3, .4, 1) backwards;
+      animation-delay: calc(var(--i, 1) * 16ms + .15s);
+      transition: box-shadow .3s, background .3s
+    }
+
+    @keyframes curpulse {
+      50% {
+        box-shadow: 0 0 0 2px var(--gold2), 0 0 26px rgba(230, 200, 120, .75)
+      }
+    }
+
+    .tile.cur {
+      z-index: 1;
+      box-shadow: 0 0 0 2px var(--gold2), 0 0 16px rgba(230, 200, 120, .5);
+      animation: curpulse 1.8s ease-in-out infinite
+    }
+
+    @keyframes finpulse {
+      50% {
+        box-shadow: 0 0 26px rgba(201, 162, 75, .6)
+      }
+    }
+
+    .tile.fin:not(.cur) {
+      animation: tilein .5s cubic-bezier(.2, 1.3, .4, 1) backwards, finpulse 2.4s 1.2s ease-in-out infinite;
+      animation-delay: calc(var(--i, 1) * 16ms + .15s), 1.2s
+    }
+
+    .tile.land::after {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 9px;
+      border: 2px solid var(--gold2);
+      pointer-events: none;
+      animation: ripple .65s ease-out forwards
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(1.5);
+        opacity: 0
+      }
+    }
+
+    @keyframes flashg {
+      35% {
+        box-shadow: 0 0 0 3px var(--green), 0 0 30px var(--green)
+      }
+    }
+
+    @keyframes flashr {
+      35% {
+        box-shadow: 0 0 0 3px var(--red), 0 0 30px var(--red)
+      }
+    }
+
+    .tile.good {
+      animation: flashg .9s
+    }
+
+    .tile.bad {
+      animation: flashr .9s
+    }
+
+    @keyframes boardshake {
+      20% {
+        transform: translateX(-6px)
+      }
+
+      40% {
+        transform: translateX(6px)
+      }
+
+      60% {
+        transform: translateX(-4px)
+      }
+
+      80% {
+        transform: translateX(3px)
+      }
+    }
+
+    .board.shake {
+      animation: boardshake .45s
+    }
+
+    @keyframes bob {
+      50% {
+        translate: 0 -3px
+      }
+    }
+
+    .tok {
+      animation: bob 2.4s ease-in-out infinite;
+      will-change: transform
+    }
+
+    .prog {
+      height: 6px;
+      margin: -4px 0 14px;
+      border-radius: 6px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, .07)
+    }
+
+    .prog i {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: 6px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2));
+      box-shadow: 0 0 10px var(--gold);
+      transition: width .5s cubic-bezier(.3, .8, .3, 1)
+    }
+
+    /* dice */
+    .die {
+      display: block;
+      filter: drop-shadow(0 0 12px rgba(201, 162, 75, .45))
+    }
+
+    @keyframes tumble {
+      25% {
+        transform: rotate(90deg) scale(1.15) translateY(-8px)
+      }
+
+      50% {
+        transform: rotate(180deg) scale(.95)
+      }
+
+      75% {
+        transform: rotate(270deg) scale(1.15) translateY(-8px)
+      }
+
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .die.roll {
+      animation: tumble .5s linear infinite
+    }
+
+    @keyframes land {
+      from {
+        transform: scale(1.7) rotate(-35deg);
+        opacity: .3
+      }
+
+      60% {
+        transform: scale(.9) rotate(6deg)
+      }
+    }
+
+    .die.land {
+      animation: land .5s cubic-bezier(.3, 1.4, .5, 1)
+    }
+
+    /* HUD */
+    @keyframes bump {
+      40% {
+        transform: scale(1.14);
+        border-color: var(--gold2);
+        box-shadow: 0 0 16px rgba(230, 200, 120, .45)
+      }
+    }
+
+    .stat.bump {
+      animation: bump .5s
+    }
+
+    .hrt {
+      display: inline-block
+    }
+
+    @keyframes heartbreak {
+      0% {
+        color: #d0475a;
+        transform: scale(1.4)
+      }
+
+      30% {
+        color: #ff8a9b;
+        transform: scale(1.8) rotate(-14deg)
+      }
+
+      55% {
+        transform: scale(.8) rotate(10deg)
+      }
+
+      100% {
+        transform: scale(1)
+      }
+    }
+
+    .hrt.brk {
+      animation: heartbreak .9s
+    }
+
+    /* question modal */
+    .ov {
+      animation: fadein .2s;
+      backdrop-filter: blur(3px)
+    }
+
+    .dlg {
+      animation: dlgin .38s cubic-bezier(.2, .9, .3, 1.15)
+    }
+
+    @keyframes dlgin {
+      from {
+        opacity: 0;
+        transform: translateY(26px) scale(.93)
+      }
+    }
+
+    @keyframes dlgout {
+      to {
+        opacity: 0;
+        transform: translateY(14px) scale(.96)
+      }
+    }
+
+    .ov.out {
+      animation: fadeout .18s forwards;
+      pointer-events: none
+    }
+
+    .ov.out .dlg {
+      animation: dlgout .18s forwards
+    }
+
+    @keyframes slidein {
+      from {
+        opacity: 0;
+        transform: translateX(-22px)
+      }
+    }
+
+    .opt {
+      animation: slidein .38s cubic-bezier(.2, .8, .3, 1) backwards;
+      transition: border-color .2s, background .25s, transform .15s, opacity .3s
+    }
+
+    .opt:nth-child(1) {
+      animation-delay: .1s
+    }
+
+    .opt:nth-child(2) {
+      animation-delay: .17s
+    }
+
+    .opt:nth-child(3) {
+      animation-delay: .24s
+    }
+
+    .opt:nth-child(4) {
+      animation-delay: .31s
+    }
+
+    .opt:hover:not(:disabled) {
+      transform: translateX(4px)
+    }
+
+    .opt:active:not(:disabled) {
+      transform: scale(.98)
+    }
+
+    @keyframes okpulse {
+      40% {
+        transform: scale(1.025);
+        box-shadow: 0 0 22px rgba(63, 155, 106, .6)
+      }
+    }
+
+    @keyframes nudge {
+      20% {
+        transform: translateX(-8px)
+      }
+
+      40% {
+        transform: translateX(8px)
+      }
+
+      60% {
+        transform: translateX(-5px)
+      }
+
+      80% {
+        transform: translateX(3px)
+      }
+    }
+
+    .opt.r {
+      animation: okpulse .7s
+    }
+
+    .opt.w {
+      animation: nudge .45s
+    }
+
+    .dlg.nudge {
+      animation: nudge .45s
+    }
+
+    .tbar i {
+      transition: width .1s linear, background .3s
+    }
+
+    @keyframes tickpulse {
+      50% {
+        transform: scale(1.3)
+      }
+    }
+
+    .tnum.low {
+      animation: tickpulse .5s ease-in-out infinite
+    }
+
+    .tbar.low {
+      animation: glow .5s infinite
+    }
+
+    .fb {
+      animation: rise .35s cubic-bezier(.2, .8, .3, 1)
+    }
+
+    /* toasts, particles, floating score */
+    .toast {
+      animation: toastin .35s cubic-bezier(.2, 1.2, .4, 1), toastout .35s 2.2s forwards
+    }
+
+    @keyframes toastin {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(.9)
+      }
+    }
+
+    @keyframes toastout {
+      to {
+        opacity: 0;
+        transform: translateY(8px)
+      }
+    }
+
+    .conf {
+      animation: fall var(--t, 3.6s) linear forwards
+    }
+
+    @keyframes fall {
+      to {
+        transform: translate(var(--sx, 0), 110vh) rotate(var(--r, 360deg))
+      }
+    }
+
+    .spark {
+      position: fixed;
+      z-index: 90;
+      width: var(--sz);
+      height: var(--sz);
+      margin: -2px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, #fff6d6, #e6c878 60%, transparent);
+      animation: spark .8s ease-out forwards
+    }
+
+    @keyframes spark {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(.2);
+        opacity: 0
+      }
+    }
+
+    .ftext {
+      position: fixed;
+      z-index: 95;
+      transform: translateX(-50%);
+      pointer-events: none;
+      font: 700 1.3rem var(--head);
+      color: var(--gold2);
+      text-shadow: 0 0 12px rgba(230, 200, 120, .8), 0 2px 4px #000;
+      animation: floatup 1.1s ease-out forwards
+    }
+
+    @keyframes floatup {
+      to {
+        transform: translate(-50%, -70px);
+        opacity: 0
+      }
+    }
+
+    .results div {
+      animation: rise .5s backwards
+    }
+
+    .results div:nth-child(2) {
+      animation-delay: .1s
+    }
+
+    .results div:nth-child(3) {
+      animation-delay: .2s
+    }
+
+    .results div:nth-child(4) {
+      animation-delay: .3s
+    }
+
+    .results div:nth-child(5) {
+      animation-delay: .4s
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *::before,
+      *::after,
+      #embers {
+        animation: none !important;
+        transition: none !important
+      }
+
+      #embers {
+        display: none
+      }
+    }
+
+    /* ===== ENCHANTED CINEMATIC MOTION UPGRADE ===== */
+    :root {
+      --magic-glow: rgba(230, 200, 120, .22);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      isolation: isolate;
+      background:
+        radial-gradient(ellipse at 8% 18%, rgba(91, 54, 143, .13), transparent 32%),
+        radial-gradient(ellipse at 92% 72%, rgba(44, 87, 130, .12), transparent 30%),
+        radial-gradient(ellipse at 50% -10%, rgba(201, 162, 75, .18), transparent 55%), var(--bg);
+      background-size: 150% 150%;
+      animation: auroraDrift 22s ease-in-out infinite alternate;
+    }
+
+    @keyframes auroraDrift {
+      0% {
+        background-position: 0% 0%, 100% 100%, 50% 0%;
+      }
+
+      100% {
+        background-position: 100% 80%, 0% 20%, 50% 10%;
+      }
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: .24;
+      background-image: radial-gradient(1px 1px at 12% 24%, #fff1c2 99%, transparent), radial-gradient(2px 2px at 78% 18%, #e6c878 99%, transparent), radial-gradient(1px 1px at 64% 82%, #fff1c2 99%, transparent), radial-gradient(1px 1px at 32% 68%, #c9a24b 99%, transparent);
+      background-size: 260px 240px, 340px 320px, 300px 280px, 380px 360px;
+      animation: starDrift 38s linear infinite alternate;
+    }
+
+    @keyframes starDrift {
+      to {
+        transform: translate3d(12px, -18px, 0);
+        opacity: .42;
+      }
+    }
+
+    #app {
+      perspective: 1000px;
+    }
+
+    #app>.wrap {
+      transform-origin: 50% 20%;
+      animation: screenArrive .72s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    @keyframes screenArrive {
+      from {
+        opacity: 0;
+        transform: translateY(28px) scale(.975);
+        filter: blur(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    .hero {
+      position: relative;
+    }
+
+    .hero::after {
+      content: "✦";
+      display: block;
+      width: max-content;
+      margin: 12px auto 0;
+      color: var(--gold);
+      font-size: 14px;
+      opacity: .75;
+      text-shadow: 0 0 18px var(--gold);
+      animation: sigilFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes sigilFloat {
+
+      0%,
+      100% {
+        transform: translateY(0) rotate(0);
+        opacity: .55;
+      }
+
+      50% {
+        transform: translateY(-5px) rotate(25deg);
+        opacity: 1;
+      }
+    }
+
+    .hero h1 {
+      text-shadow: 0 0 28px rgba(230, 200, 120, .13);
+    }
+
+    .panel {
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, .16), inset 0 1px rgba(255, 255, 255, .025);
+      transition: transform .35s cubic-bezier(.2, .8, .2, 1), border-color .35s, box-shadow .35s;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 -120%;
+      width: 70%;
+      pointer-events: none;
+      background: linear-gradient(100deg, transparent, rgba(255, 240, 200, .045), transparent);
+      transform: skewX(-18deg);
+      transition: left .85s ease;
+    }
+
+    .panel:hover {
+      border-color: rgba(230, 200, 120, .42);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, .25), 0 0 28px rgba(201, 162, 75, .055);
+    }
+
+    .panel:hover::before {
+      left: 150%;
+    }
+
+    .menu {
+      animation: menuReveal .7s .08s backwards;
+    }
+
+    @keyframes menuReveal {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .menu>input,
+    .menu>select {
+      box-shadow: 0 5px 18px rgba(0, 0, 0, .12);
+    }
+
+    input:hover,
+    select:hover,
+    textarea:hover {
+      border-color: rgba(230, 200, 120, .45);
+    }
+
+    .btn {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .btn:not(:disabled) {
+      box-shadow: 0 4px 0 rgba(75, 49, 9, .32), 0 8px 22px rgba(201, 162, 75, .08);
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.015);
+      box-shadow: 0 7px 0 rgba(75, 49, 9, .25), 0 12px 28px rgba(201, 162, 75, .22);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px) scale(.975);
+      box-shadow: 0 1px 0 rgba(75, 49, 9, .3);
+    }
+
+    .btn.ghost:hover:not(:disabled) {
+      background: rgba(201, 162, 75, .09);
+      box-shadow: 0 0 24px rgba(201, 162, 75, .13);
+    }
+
+    .stat {
+      transition: transform .25s, border-color .25s, background .25s;
+    }
+
+    .stat:hover {
+      transform: translateY(-3px);
+      border-color: var(--line2);
+      background: linear-gradient(145deg, rgba(230, 200, 120, .08), var(--panel2));
+    }
+
+    .board {
+      perspective: 800px;
+    }
+
+    .tile {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+
+    .tile:hover {
+      z-index: 3;
+      transform: translateY(-3px) scale(1.045);
+      border-color: var(--gold2);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .3), 0 0 18px rgba(230, 200, 120, .15);
+    }
+
+    .tile[data-c] {
+      transition: transform .24s cubic-bezier(.2, .8, .2, 1), box-shadow .3s, background .3s, border-color .3s;
+    }
+
+    .tile.cur {
+      filter: brightness(1.13);
+    }
+
+    .tile.fin {
+      background-image: linear-gradient(135deg, rgba(255, 244, 199, .1), transparent 65%);
+    }
+
+    .tok {
+      transition: filter .2s;
+      filter: drop-shadow(0 0 8px rgba(230, 200, 120, .25));
+    }
+
+    .die {
+      text-shadow: 0 0 28px rgba(230, 200, 120, .32);
+      transition: filter .3s;
+    }
+
+    .side .panel {
+      background: linear-gradient(145deg, rgba(230, 200, 120, .035), transparent 60%), var(--panel);
+    }
+
+    .ov {
+      background: rgba(3, 2, 7, .84);
+      backdrop-filter: blur(10px) saturate(125%);
+    }
+
+    .dlg {
+      box-shadow: 0 30px 100px rgba(0, 0, 0, .6), 0 0 45px rgba(201, 162, 75, .09), inset 0 1px rgba(255, 255, 255, .04);
+    }
+
+    .tag {
+      transition: background .25s, transform .25s;
+    }
+
+    .tag:hover {
+      transform: translateY(-2px);
+      background: rgba(201, 162, 75, .1);
+    }
+
+    .opt {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .opt::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .045), transparent);
+      transform: translateX(-120%);
+      transition: transform .55s;
+      pointer-events: none;
+    }
+
+    .opt:hover:not(:disabled)::before {
+      transform: translateX(120%);
+    }
+
+    .opt.r {
+      box-shadow: 0 0 22px rgba(63, 155, 106, .13);
+    }
+
+    .opt.w {
+      box-shadow: 0 0 22px rgba(179, 53, 74, .13);
+    }
+
+    .tbar {
+      height: 7px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, .5);
+    }
+
+    .tbar i {
+      box-shadow: 0 0 14px rgba(230, 200, 120, .45);
+      border-radius: inherit;
+    }
+
+    .results div {
+      transition: transform .3s, border-color .3s, box-shadow .3s;
+    }
+
+    .results div:hover {
+      transform: translateY(-4px) scale(1.025);
+      border-color: var(--line2);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+    }
+
+    tbody tr {
+      transition: background .25s, transform .25s;
+    }
+
+    tbody tr:hover {
+      background: rgba(201, 162, 75, .055);
+    }
+
+    .foot .btn {
+      animation: footIn .5s backwards;
+    }
+
+    .foot .btn:nth-child(2) {
+      animation-delay: .12s;
+    }
+
+    @keyframes footIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+    }
+
+    .dbs {
+      transition: color .25s;
+    }
+
+    .dbs:hover {
+      color: var(--gold2);
+    }
+
+    ::selection {
+      color: #171108;
+      background: var(--gold2);
+    }
+
+    :focus-visible {
+      outline-color: var(--gold2) !important;
+    }
+
+    @media (max-width:600px) {
+      .panel:hover {
+        transform: none;
+      }
+
+      .tile:hover {
+        transform: none;
+      }
+
+      body::before {
+        opacity: .12;
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      body,
+      body::before,
+      #app>.wrap,
+      .hero::after,
+      .menu>*,
+      .foot .btn {
+        animation: none !important;
+      }
+
+      .panel,
+      .btn,
+      .tile,
+      .stat,
+      .results div {
+        transition: none !important;
+      }
+    }
+
+
+
+    /* ===== CINEMATIC MOVIE MODE: enchanted castle atmosphere ===== */
+    :root {
+      --movie-gold: #f4d98b;
+      --movie-glow: rgba(230, 200, 120, .28);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      isolation: isolate;
+      overflow-x: hidden;
+      background: #07070c;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    body::before {
+      opacity: .8;
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(201, 162, 75, .14), transparent 42%),
+        radial-gradient(ellipse at 8% 80%, rgba(73, 55, 128, .13), transparent 40%),
+        radial-gradient(ellipse at 92% 55%, rgba(128, 38, 49, .10), transparent 35%);
+      animation: castleBreath 12s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      z-index: 30;
+      opacity: .22;
+      background: repeating-linear-gradient(0deg, transparent 0px, rgba(255, 255, 255, .025) 1px, transparent 2px, transparent 5px);
+      mix-blend-mode: screen;
+      animation: filmFlicker .18s steps(2) infinite;
+    }
+
+    @keyframes castleBreath {
+      from {
+        transform: scale(1);
+        filter: hue-rotate(-5deg)
+      }
+
+      to {
+        transform: scale(1.08);
+        filter: hue-rotate(8deg)
+      }
+    }
+
+    @keyframes filmFlicker {
+
+      0%,
+      100% {
+        opacity: .13
+      }
+
+      50% {
+        opacity: .24
+      }
+    }
+
+    #app {
+      position: relative;
+      z-index: 2;
+    }
+
+    #app>* {
+      animation: sceneReveal 1s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    .cinema-scene-in {
+      animation: sceneReveal 1s cubic-bezier(.16, 1, .3, 1) both !important;
+    }
+
+    @keyframes sceneReveal {
+      0% {
+        opacity: 0;
+        transform: translateY(28px) scale(.975);
+        filter: blur(8px)
+      }
+
+      65% {
+        filter: blur(0)
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1)
+      }
+    }
+
+    .wrap {
+      position: relative;
+    }
+
+    .wrap::before {
+      content: "";
+      position: fixed;
+      pointer-events: none;
+      z-index: -1;
+      inset: -20vh -30vw;
+      background: conic-gradient(from 180deg at 50% 40%, transparent 0deg, rgba(230, 200, 120, .035) 24deg, transparent 48deg, rgba(129, 105, 198, .035) 85deg, transparent 120deg);
+      animation: magicOrbit 38s linear infinite;
+    }
+
+    @keyframes magicOrbit {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .hero {
+      position: relative;
+      padding: 12px 0 22px;
+      animation: heroArrival 1.4s .12s both;
+    }
+
+    @keyframes heroArrival {
+      0% {
+        opacity: 0;
+        transform: translateY(35px);
+        letter-spacing: .25em;
+        filter: blur(12px)
+      }
+
+      100% {
+        opacity: 1;
+        transform: none;
+        filter: blur(0)
+      }
+    }
+
+    .hero h1 {
+      text-shadow: 0 0 8px rgba(230, 200, 120, .35), 0 0 32px rgba(230, 200, 120, .22), 0 0 80px rgba(201, 162, 75, .13);
+      animation: titlePulse 5s 1.5s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+
+      0%,
+      100% {
+        text-shadow: 0 0 8px rgba(230, 200, 120, .3), 0 0 32px rgba(230, 200, 120, .18)
+      }
+
+      50% {
+        text-shadow: 0 0 16px rgba(255, 231, 164, .7), 0 0 48px rgba(230, 200, 120, .4), 0 0 100px rgba(201, 162, 75, .2)
+      }
+    }
+
+    .hero::after {
+      content: "✦  ·  ✧  ·  ✦";
+      display: block;
+      margin: 18px auto 0;
+      color: var(--gold);
+      letter-spacing: .9em;
+      font-size: 12px;
+      opacity: .7;
+      animation: sigilFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes sigilFloat {
+
+      0%,
+      100% {
+        transform: translateY(0);
+        opacity: .45
+      }
+
+      50% {
+        transform: translateY(-5px);
+        opacity: 1
+      }
+    }
+
+    .panel,
+    .menu,
+    .board-wrap,
+    .stats,
+    .card {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(230, 200, 120, .27);
+      box-shadow: 0 18px 60px rgba(0, 0, 0, .3), inset 0 1px rgba(255, 255, 255, .025);
+      transition: transform .55s cubic-bezier(.2, .8, .2, 1), box-shadow .55s, border-color .4s;
+    }
+
+    .panel::before,
+    .menu::before,
+    .board-wrap::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background: linear-gradient(115deg, transparent 20%, rgba(255, 239, 190, .055) 42%, transparent 56%);
+      transform: translateX(-130%);
+      animation: relicShine 9s ease-in-out infinite;
+    }
+
+    @keyframes relicShine {
+
+      0%,
+      60%,
+      100% {
+        transform: translateX(-130%)
+      }
+
+      75% {
+        transform: translateX(130%)
+      }
+    }
+
+    .panel:hover,
+    .menu:hover,
+    .board-wrap:hover {
+      border-color: rgba(244, 217, 139, .5);
+      box-shadow: 0 24px 75px rgba(0, 0, 0, .43), 0 0 35px rgba(201, 162, 75, .07);
+    }
+
+    .btn {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      transform: translateZ(0);
+      transition: transform .25s cubic-bezier(.2, .8, .2, 1), box-shadow .35s, filter .35s, background .35s;
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: -80%;
+      left: -45%;
+      width: 35%;
+      height: 260%;
+      transform: rotate(25deg);
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .25), transparent);
+      transition: left .65s ease;
+    }
+
+    .btn:hover::before {
+      left: 130%;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px) scale(1.025);
+      filter: brightness(1.13);
+      box-shadow: 0 8px 28px rgba(201, 162, 75, .2), 0 0 18px rgba(201, 162, 75, .1);
+    }
+
+    .btn:active {
+      transform: translateY(1px) scale(.98);
+    }
+
+    input,
+    select,
+    textarea {
+      transition: border-color .3s, box-shadow .3s, background .3s, transform .3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      box-shadow: 0 0 0 3px rgba(201, 162, 75, .11), 0 0 28px rgba(201, 162, 75, .1);
+      transform: translateY(-1px);
+    }
+
+    .tile {
+      position: relative;
+      isolation: isolate;
+      transition: transform .28s cubic-bezier(.2, .9, .25, 1.4), filter .3s, box-shadow .3s;
+    }
+
+    .tile:hover {
+      z-index: 3;
+      transform: translateY(-5px) scale(1.055) rotate(-1deg);
+      filter: brightness(1.22);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .42), 0 0 22px rgba(230, 200, 120, .18);
+    }
+
+    .tile:active {
+      transform: scale(.96);
+    }
+
+    .ov {
+      backdrop-filter: blur(12px) saturate(125%);
+      animation: veilIn .35s ease both;
+    }
+
+    @keyframes veilIn {
+      from {
+        opacity: 0;
+        backdrop-filter: blur(0)
+      }
+
+      to {
+        opacity: 1;
+        backdrop-filter: blur(12px) saturate(125%)
+      }
+    }
+
+    .dlg {
+      animation: spellDialog .5s cubic-bezier(.16, 1, .3, 1) both;
+      box-shadow: 0 30px 120px rgba(0, 0, 0, .7), 0 0 45px rgba(201, 162, 75, .12);
+    }
+
+    @keyframes spellDialog {
+      from {
+        opacity: 0;
+        transform: translateY(22px) scale(.92) rotateX(7deg);
+        filter: blur(7px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+        filter: blur(0)
+      }
+    }
+
+    .dlg .btn {
+      animation: spellItem .45s .12s both;
+    }
+
+    @keyframes spellItem {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    #toast .toast {
+      animation: toastMagic .45s cubic-bezier(.16, 1, .3, 1) both;
+      box-shadow: 0 12px 45px #0009, 0 0 24px rgba(201, 162, 75, .12);
+    }
+
+    @keyframes toastMagic {
+      from {
+        opacity: 0;
+        transform: translateX(30px) scale(.95)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .results>div {
+      animation: statRise .6s cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    .results>div:nth-child(2) {
+      animation-delay: .07s
+    }
+
+    .results>div:nth-child(3) {
+      animation-delay: .14s
+    }
+
+    .results>div:nth-child(4) {
+      animation-delay: .21s
+    }
+
+    .results>div:nth-child(5) {
+      animation-delay: .28s
+    }
+
+    @keyframes statRise {
+      from {
+        opacity: 0;
+        transform: translateY(15px) scale(.94)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .cinema-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: #030307;
+      color: #f4d98b;
+      transition: opacity 1.25s ease, visibility 1.25s ease;
+    }
+
+    .cinema-intro.leaving {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .cinema-stars,
+    .cinema-stars::before,
+    .cinema-stars::after {
+      position: absolute;
+      inset: -50%;
+      content: "";
+      background-image: radial-gradient(1px 1px at 12% 20%, #fff9 50%, transparent 100%), radial-gradient(2px 2px at 70% 42%, #f4d98b99 50%, transparent 100%), radial-gradient(1px 1px at 35% 75%, #fff8 50%, transparent 100%), radial-gradient(1px 1px at 88% 80%, #fff7 50%, transparent 100%), radial-gradient(2px 2px at 55% 12%, #f4d98b88 50%, transparent 100%);
+      background-size: 360px 300px;
+      animation: starDrift 30s linear infinite;
+    }
+
+    .cinema-stars::before {
+      transform: scale(1.4) rotate(18deg);
+      opacity: .45;
+      animation-duration: 45s;
+    }
+
+    .cinema-stars::after {
+      transform: scale(1.8) rotate(-22deg);
+      opacity: .25;
+      animation-duration: 60s;
+    }
+
+    @keyframes starDrift {
+      from {
+        transform: translate3d(0, 0, 0) rotate(0)
+      }
+
+      to {
+        transform: translate3d(5%, 3%, 0) rotate(8deg)
+      }
+    }
+
+    .cinema-beam {
+      position: absolute;
+      width: 120vw;
+      height: 90vh;
+      top: -40vh;
+      left: -10vw;
+      background: conic-gradient(from 180deg at 50% 0%, transparent 0deg, rgba(201, 162, 75, .11) 8deg, transparent 17deg, rgba(201, 162, 75, .07) 27deg, transparent 38deg);
+      filter: blur(16px);
+      animation: beamSweep 9s ease-in-out infinite alternate;
+    }
+
+    @keyframes beamSweep {
+      from {
+        transform: rotate(-8deg);
+        opacity: .3
+      }
+
+      to {
+        transform: rotate(9deg);
+        opacity: .9
+      }
+    }
+
+    .cinema-curtain {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 51%;
+      background: linear-gradient(90deg, #100d15, #241726 55%, #08070c);
+      box-shadow: inset -25px 0 55px #0008;
+      z-index: 2;
+    }
+
+    .cinema-curtain.left {
+      left: 0;
+      border-right: 1px solid #c9a24b55;
+      animation: curtainLeft 2.2s 1.4s cubic-bezier(.7, 0, .2, 1) forwards;
+    }
+
+    .cinema-curtain.right {
+      right: 0;
+      border-left: 1px solid #c9a24b55;
+      animation: curtainRight 2.2s 1.4s cubic-bezier(.7, 0, .2, 1) forwards;
+    }
+
+    @keyframes curtainLeft {
+      to {
+        transform: translateX(-103%)
+      }
+    }
+
+    @keyframes curtainRight {
+      to {
+        transform: translateX(103%)
+      }
+    }
+
+    .cinema-content {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 28px;
+      width: min(900px, 95vw);
+      animation: studioTitle 1.5s .3s both;
+    }
+
+    @keyframes studioTitle {
+      from {
+        opacity: 0;
+        transform: scale(.8);
+        filter: blur(15px);
+        letter-spacing: .6em
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+        letter-spacing: normal
+      }
+    }
+
+    .cinema-mark {
+      font-size: clamp(12px, 1.7vw, 18px);
+      letter-spacing: .55em;
+      text-transform: uppercase;
+      color: #d9bd78;
+    }
+
+    .cinema-title {
+      margin: 20px 0 10px;
+      font: 700 clamp(38px, 9vw, 100px)/1.05 var(--head);
+      color: #f8e6ac;
+      letter-spacing: .07em;
+      text-shadow: 0 0 20px #c9a24b88, 0 0 80px #c9a24b55;
+    }
+
+    .cinema-subtitle {
+      font: italic clamp(17px, 2.6vw, 26px) var(--body);
+      color: #c6b99d;
+      letter-spacing: .12em;
+    }
+
+    .cinema-rule {
+      height: 1px;
+      width: min(360px, 70%);
+      margin: 24px auto;
+      background: linear-gradient(90deg, transparent, #f4d98b, transparent);
+      animation: ruleGrow 1.3s .7s both;
+    }
+
+    @keyframes ruleGrow {
+      from {
+        width: 0;
+        opacity: 0
+      }
+
+      to {
+        opacity: 1
+      }
+    }
+
+    .cinema-skip {
+      position: absolute;
+      z-index: 5;
+      bottom: 26px;
+      right: 28px;
+      padding: 10px 15px;
+      border: 1px solid #c9a24b66;
+      border-radius: 2px;
+      color: #e6d6ad;
+      background: #0b0910aa;
+      font: 12px var(--head);
+      letter-spacing: .12em;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+
+    .cinema-skip:hover {
+      background: #c9a24b22;
+      transform: translateY(-2px);
+    }
+
+    .cinema-progress {
+      height: 2px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 6;
+      background: #c9a24b22;
+    }
+
+    .cinema-progress::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 0;
+      background: #f4d98b;
+      box-shadow: 0 0 12px #f4d98b;
+      animation: openingProgress 6.2s linear forwards;
+    }
+
+    @keyframes openingProgress {
+      to {
+        width: 100%
+      }
+    }
+
+    @media(max-width:600px) {
+      .cinema-curtain {
+        width: 52%
+      }
+
+      .cinema-content {
+        padding: 18px
+      }
+
+      .cinema-mark {
+        letter-spacing: .25em
+      }
+
+      .cinema-title {
+        letter-spacing: .02em
+      }
+
+      .panel:hover,
+      .menu:hover,
+      .board-wrap:hover {
+        transform: none
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important
+      }
+
+      .cinema-intro {
+        display: none !important
+      }
+    }
   </style>
 </head>
 
 <body>
+  <div class="cinema-intro" id="cinemaIntro" aria-label="TechLudo cinematic opening">
+    <div class="cinema-stars"></div>
+    <div class="cinema-beam"></div>
+    <div class="cinema-content">
+      <div class="cinema-mark">An enchanted coding adventure</div>
+      <div class="cinema-rule"></div>
+      <div class="cinema-title">TECHLUDO</div>
+      <div class="cinema-subtitle">Every answer writes your legend.</div>
+    </div>
+    <div class="cinema-curtain left"></div>
+    <div class="cinema-curtain right"></div>
+    <button class="cinema-skip" id="cinemaSkip" type="button">SKIP INTRO ↗</button>
+    <div class="cinema-progress"></div>
+  </div>
   <div id="app"></div>
   <div id="modal"></div>
   <div id="toast" aria-live="polite"></div>
@@ -880,28 +2571,88 @@
     let ac; const beep = (f, d = .12, t = 'sine') => {if (!cfg.sound) return; try {ac = ac || new AudioContext(); const o = ac.createOscillator(), g = ac.createGain(); o.type = t; o.frequency.value = f; g.gain.value = .07; o.connect(g); g.connect(ac.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + d); o.stop(ac.currentTime + d)} catch { } };
     const sfx = {roll: () => beep(300, .05, 'square'), hop: () => beep(520, .06), ok: () => {beep(660, .12); setTimeout(() => beep(880, .18), 110)}, bad: () => beep(200, .3, 'sawtooth'), win: () => [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => beep(f, .25), i * 140))};
     function toast(m) {const t = h('div', {class: 'toast'}, m); $('#toast').append(t); setTimeout(() => t.remove(), 2600)}
-    function confetti() {for (let i = 0; i < 40; i++) {const c = h('span', {class: 'conf'}, '✨⭐'[rnd(2)]); c.style.left = rnd(100) + 'vw'; c.style.animationDelay = (rnd(15) / 10) + 's'; document.body.append(c); setTimeout(() => c.remove(), 5000)} }
-    function modal(...k) {const m = h('div', {class: 'ov', role: 'dialog', 'aria-modal': 'true'}, h('div', {class: 'dlg'}, ...k)); $('#modal').append(m); return () => m.remove()}
+    function confetti() {
+      if (RM) return;
+      for (let i = 0; i < 70; i++) {
+        const c = h('span', {class: 'conf'}, ['✨', '⭐', '✦', '●'][rnd(4)]);
+        c.style.cssText = `left:${rnd(100)}vw;font-size:${12 + rnd(18)}px;color:${['#e6c878', '#c9a24b', '#fff3cf', '#d0475a', '#4a86e8'][rnd(5)]};--t:${3 + rnd(30) / 10}s;--sx:${rnd(160) - 80}px;--r:${rnd(720) - 360}deg;animation-delay:${rnd(20) / 10}s`;
+        document.body.append(c); setTimeout(() => c.remove(), 7000)
+      }
+    }
+    function modal(...k) {
+      const dlg = h('div', {class: 'dlg'}, ...k), m = h('div', {class: 'ov', role: 'dialog', 'aria-modal': 'true'}, dlg); $('#modal').append(m);
+      const close = () => {if (m.classList.contains('out')) return; m.classList.add('out'); setTimeout(() => m.remove(), RM ? 0 : 180)}; close.el = dlg; return close
+    }
     const view = (...k) => {$('#app').replaceChildren(...k); window.scrollTo(0, 0)};
     const save = () => sv(KEY, S);
-    const hearts = n => h('span', {class: 'hearts', 'aria-label': n + ' lives'}, '♥'.repeat(Math.max(0, n)), h('span', {class: 'x'}, '♥'.repeat(Math.max(0, LIVES - n))));
+    const hearts = (n, brk = -1) => h('span', {class: 'hearts', 'aria-label': n + ' lives'}, Array.from({length: LIVES}, (_, i) => h('span', {class: 'hrt' + (i < n ? '' : ' x') + (i === brk ? ' brk' : '')}, '♥')));
 
     /* leaderboard when the database is offline: best run per player, by score then fewest turns */
-    const topRuns = rs => {const seen = new Set(); return rs.slice().sort((a, b) => b.score - a.score || a.turns - b.turns).filter(r => {const k = r.name.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true}).slice(0, 5)};
+    const HOF = 10, isWin = p => 'won' in p ? +p.won > 0 : 'wins' in p ? +p.wins > 0 : true;   // Hall of Fame: winners only, top 10
+    const topRuns = rs => {const seen = new Set(); return rs.filter(r => r.won === true).sort((a, b) => b.score - a.score || a.turns - b.turns).filter(r => {const k = r.name.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true}).slice(0, HOF)};
+
+    /* ===== motion helpers ===== */
+    const RM = matchMedia('(prefers-reduced-motion: reduce)').matches, MSG = 'Roll the dice · press Space';
+    const pop = (el, c, ms = 800) => {if (!el) return; el.classList.remove(c); void el.offsetWidth; el.classList.add(c); clearTimeout(el['_' + c]); el['_' + c] = setTimeout(() => el.classList.remove(c), ms)};
+    const fx = (tile, c) => pop(T[tile] && T[tile].parentNode, c, 900);
+    const countTo = (el, from, to, ms = 600, suf = '') => {
+      if (RM || from === to) {el.textContent = to + suf; return }
+      const t0 = performance.now(), step = t => {const p = Math.min(1, (t - t0) / ms); el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - p, 3))) + suf; if (p < 1) requestAnimationFrame(step)};
+      requestAnimationFrame(step)
+    };
+    function burst(x, y, n = 14) {
+      if (RM) return;
+      for (let i = 0; i < n; i++) {
+        const s = h('span', {class: 'spark'}), a = Math.PI * 2 * i / n + rnd(100) / 100, d = 40 + rnd(70);
+        s.style.cssText = `left:${x}px;top:${y}px;--dx:${Math.cos(a) * d}px;--dy:${Math.sin(a) * d}px;--sz:${3 + rnd(5)}px`;
+        document.body.append(s); setTimeout(() => s.remove(), 900)
+      }
+    }
+    function bigBurst() {for (let i = 0; i < 5; i++) setTimeout(() => burst(innerWidth * (.15 + rnd(70) / 100), innerHeight * (.15 + rnd(40) / 100), 26), i * 260)}
+    function floatText(t, x, y) {if (RM) return; const e = h('span', {class: 'ftext'}, t); e.style.left = x + 'px'; e.style.top = y + 'px'; document.body.append(e); setTimeout(() => e.remove(), 1200)}
+    function embers() {
+      if (RM || $('#embers')) return; const d = h('div', {id: 'embers', 'aria-hidden': 'true'});
+      for (let i = 0; i < 22; i++) {const s = h('i'); s.style.cssText = `left:${rnd(100)}%;--s:${3 + rnd(6)}px;--d:${10 + rnd(14)}s;--dl:-${rnd(24)}s;--x:${rnd(90) - 45}px`; d.append(s)}
+      document.body.prepend(d)
+    }
+    /* answer feedback: tile flash, board/dialog shake, sparkles and floating points */
+    function feedback(ok, tile, dlg, btn, pts, bonus) {
+      fx(tile, ok ? 'good' : 'bad');
+      if (!ok) {pop(dlg, 'nudge', 500); pop($('.board'), 'shake', 500); return }
+      const r = btn.getBoundingClientRect(), x = r.left + r.width / 2;
+      floatText('+' + pts, x, r.top); burst(x, r.top + r.height / 2, bonus ? 28 : 14);
+      if (bonus) setTimeout(() => floatText('Three in a row · +10', x, r.top - 34), 300);
+      if (tile === N) bigBurst()
+    }
+    function finishFx(w) {
+      const m = $('#app .wrap'); if (m) m.classList.add(w ? 'vict' : S.lost ? 'defeat' : 'ended');
+      document.querySelectorAll('.results strong').forEach((el, i) => {const mm = /^(\d+)(%?)$/.exec(el.textContent); if (mm) countTo(el, 0, +mm[1], 900 + i * 120, mm[2])});
+      if (w) bigBurst()
+    }
+    /* "Play again" must carry the NU ID (the server decides whether another attempt is allowed) */
+    async function again() {
+      try {if (DB && S.nu) await api('nu_start', {name: S.name, nu_id: S.nu}); newGame(S.name, S.nu)} catch (e) {toast(e.message); home()}
+    }
+    /* Space or R rolls the dice (never while typing, or while a dialog is open) */
+    document.addEventListener('keydown', e => {
+      if (e.ctrlKey || e.metaKey || e.altKey || !(e.key === ' ' || e.key.toLowerCase() === 'r')) return;
+      const a = document.activeElement; if (a && a !== document.body && a !== T.roll && /^(INPUT|TEXTAREA|SELECT|BUTTON|A)$/.test(a.tagName)) return;
+      if (T && T.roll && T.roll.isConnected && !T.roll.disabled && !$('.ov:not(.out)')) {e.preventDefault(); roll()}
+    });
 
     /* ===== home ===== */
     async function home() {
       const sd = ld(KEY, null), saved = sd && sd.v === 2 && !sd.over ? sd : null; let lb = [];
-      if (DB) {try {lb = (await api('leaderboard')).players} catch { } } else lb = topRuns(ld('tl.runs', []));
+      if (DB) {try {lb = (await api('leaderboard')).players.filter(isWin).slice(0, HOF)} catch { } } else lb = topRuns(ld('tl.runs', []));
       const name = h('input', {value: cfg.name || '', maxlength: 14, placeholder: 'Your name', 'aria-label': 'Your name', autocomplete: 'off'});
       const nu = h('input', {maxlength: 8, placeholder: 'NU ID (e.g. 26K-3058)', 'aria-label': 'NU ID', autocomplete: 'off', autocapitalize: 'characters', spellcheck: 'false', oninput: e => {e.target.value = e.target.value.toUpperCase()}});
       const nuErr = h('p', {class: 'err', role: 'alert'}); let starting = false;
       const start = async () => {
         if (starting) return;
         const nm = name.value.trim() || 'Wizard', id = nu.value.trim().toUpperCase();
-        if (!NU_RE.test(id)) {nuErr.textContent = 'Enter your NU ID like 26K-3058.'; nu.focus(); return}
+        if (!NU_RE.test(id)) {nuErr.textContent = 'Enter your NU ID like 26K-3058.'; nu.focus(); return }
         nuErr.textContent = ''; starting = true;
-        if (DB) {try {await api('nu_start', {name: nm, nu_id: id})} catch (e) {nuErr.textContent = e.message; starting = false; return} }
+        if (DB) {try {await api('nu_start', {name: nm, nu_id: id})} catch (e) {nuErr.textContent = e.message; starting = false; return } }
         starting = false; cfg.name = nm; sv('tl.cfg', cfg); newGame(nm, id)
       };
       name.onkeydown = nu.onkeydown = e => {if (e.key === 'Enter') start()};
@@ -911,10 +2662,10 @@
           saved ? h('button', {class: 'btn', onclick: () => resume(saved)}, `Continue · ${saved.name} · tile ${saved.pos}/${N}`) : null,
           name, nu, nuErr, h('button', {class: 'btn' + (saved ? ' ghost' : ''), onclick: start}, saved ? 'New game' : 'Begin'),
           h('p', {class: 'sub'}, 'One attempt per NU ID.')),
-        h('section', {class: 'panel'}, h('h3', {}, 'Hall of Fame'),
+        h('section', {class: 'panel'}, h('h3', {}, 'Hall of Fame'), h('p', {class: 'sub'}, 'Top 10 · only wizards who reached the Great Hall'),
           lb.length ? h('table', {}, h('thead', {}, h('tr', {}, h('th', {}, '#'), h('th', {}, 'Wizard'), h('th', {class: 'num'}, 'Score'), h('th', {class: 'num'}, 'Turns'))),
             h('tbody', {}, lb.map((p, i) => h('tr', {}, h('td', {}, i + 1), h('td', {}, p.name), h('td', {class: 'num'}, p.score), h('td', {class: 'num'}, p.turns)))))
-            : h('p', {class: 'sub'}, 'No scores yet. Be the first!')),
+            : h('p', {class: 'sub'}, 'No winners yet. Reach the Great Hall to be the first!')),
         h('section', {class: 'panel'}, h('h3', {}, 'How to play'),
           h('ul', {class: 'rules'},
             h('li', {}, `Roll the dice and answer the question within ${SECS} seconds.`),
@@ -1012,36 +2763,49 @@
       try {localStorage.removeItem(KEY)} catch { }
       if (S.ok + S.bad === 0) return;
       if (DB && S.nu) api('game_end', {mode: 'solo', turns: S.turn, players: [{name: S.name, nu_id: S.nu, score: S.score, ok: S.ok, bad: S.bad, won: S.won}]}).catch(() => toast('Could not save the score to the database'));
-      else {const rs = ld('tl.runs', []); rs.push({name: S.name, score: S.score, turns: S.turn}); sv('tl.runs', rs.sort((a, b) => b.score - a.score || a.turns - b.turns).slice(0, 100))}
+      else if (S.won) {const rs = ld('tl.runs', []); rs.push({name: S.name, score: S.score, turns: S.turn, won: true}); sv('tl.runs', rs.sort((a, b) => b.score - a.score || a.turns - b.turns).slice(0, 100))}
     }
 
     /* ===== board ===== */
     function tilePos(k) {const rows = Math.ceil(N / COLS), i = k - 1, r = Math.floor(i / COLS); let c = i % COLS; if (r % 2) c = COLS - 1 - c; return {r: rows - r, c: c + 1}}
-    const place = pos => (pos ? T[pos] : T.start).append(T.tok);
-    const hop = () => {T.tok.classList.remove('hop'); void T.tok.offsetWidth; T.tok.classList.add('hop')};
+    function place(pos, ms = 200) {
+      const tok = T.tok, from = tok.isConnected ? tok.getBoundingClientRect() : null;
+      (pos ? T[pos] : T.start).append(tok);
+      if (T.cur) T.cur.classList.remove('cur'); T.cur = pos ? T[pos].parentNode : null; if (T.cur) T.cur.classList.add('cur');
+      if (!from || RM || !tok.animate) return;
+      const to = tok.getBoundingClientRect(), dx = from.left - to.left, dy = from.top - to.top; if (!dx && !dy) return;
+      tok.animate([{transform: `translate(${dx}px,${dy}px) scale(1)`}, {transform: `translate(${dx / 2}px,${dy / 2 - 16}px) scale(1.2)`, offset: .5}, {transform: 'translate(0,0) scale(1)'}], {duration: ms, easing: 'ease-out'})
+    }
 
     function game() {
       busy = false; T = {};
       const board = h('div', {class: 'board', role: 'img', 'aria-label': 'Game board'});
       for (let k = 1; k <= N; k++) {
         const {r, c} = tilePos(k), hold = h('div', {class: 'tokens'});
-        T[k] = hold; board.append(h('div', {class: 'tile' + (k === N ? ' fin' : ''), 'data-c': catOf(k), style: `grid-row:${r};grid-column:${c}`, title: (k === N ? 'The Great Hall' : 'Tile ' + k) + ' · ' + CN[catOf(k)]}, h('i', {class: 'n'}, k), hold))
+        T[k] = hold; board.append(h('div', {class: 'tile' + (k === N ? ' fin' : ''), 'data-c': catOf(k), style: `grid-row:${r};grid-column:${c};--i:${k}`, title: (k === N ? 'The Great Hall' : 'Tile ' + k) + ' · ' + CN[catOf(k)]}, h('i', {class: 'n'}, k), hold))
       }
       T.start = h('div', {class: 'tokens start'});
       T.tok = h('div', {class: 'tok', title: S.name}, [...S.name][0].toUpperCase()); place(S.pos);
-      T.hud = h('div', {class: 'hud'}); T.die = h('div', {class: 'die', role: 'img', 'aria-label': 'Dice'}, '⚅'); T.msg = h('p', {class: 'msg'}, 'Roll the dice to move.');
+      T.last = {}; T.shown = S.score; T.hudEls = {};
+      T.hud = h('div', {class: 'hud'}, ['Lives', 'Score', 'Turn', 'Tile'].map(k => h('div', {class: 'stat'}, h('small', {}, k), T.hudEls[k] = h('strong'))));
+      T.prog = h('div', {class: 'prog', role: 'progressbar', 'aria-label': 'Journey progress', 'aria-valuemin': 0, 'aria-valuemax': N}, h('i')); T.die = h('div', {class: 'die', role: 'img', 'aria-label': 'Dice'}, '⚅'); T.msg = h('p', {class: 'msg'}, MSG);
       T.roll = h('button', {class: 'btn big', onclick: roll}, 'Roll dice');
       T.menu = h('button', {class: 'btn ghost', onclick: home}, 'Menu (progress is saved)'); T.end = h('button', {class: 'btn ghost', onclick: endEarly}, 'End game');
       view(h('main', {class: 'wrap'},
         h('div', {class: 'game'},
-          h('section', {class: 'panel'}, T.hud, board, h('div', {class: 'startbox'}, T.start, 'Start · exact roll needed on tile ' + N),
+          h('section', {class: 'panel'}, T.hud, T.prog, board, h('div', {class: 'startbox'}, T.start, 'Start · exact roll needed on tile ' + N),
             h('div', {class: 'legend'}, CATS.map(c => h('span', {class: 'lg'}, h('i', {'data-c': c}), CN[c])))),
           h('aside', {class: 'side'}, h('div', {class: 'panel'}, T.die, T.msg, T.roll), T.menu, T.end))));
       paint()
     }
 
     function paint() {
-      T.hud.replaceChildren(...[['Lives', hearts(S.lives)], ['Score', S.score], ['Turn', S.turn], ['Tile', S.pos + '/' + N]].map(([k, v]) => h('div', {class: 'stat'}, h('small', {}, k), h('strong', {}, v))));
+      const L = T.last, E = T.hudEls, bump = el => pop(el.parentNode, 'bump', 500);
+      if (L.lives !== S.lives) {const lost = L.lives != null && S.lives < L.lives; E.Lives.replaceChildren(hearts(S.lives, lost ? S.lives : -1)); if (lost) bump(E.Lives); L.lives = S.lives}
+      if (L.score !== S.score) {const first = L.score == null; countTo(E.Score, first ? S.score : T.shown, S.score, 700); T.shown = S.score; if (!first) bump(E.Score); L.score = S.score}
+      if (L.turn !== S.turn) {E.Turn.textContent = S.turn; if (L.turn != null) bump(E.Turn); L.turn = S.turn}
+      if (L.pos !== S.pos) {E.Tile.textContent = S.pos + '/' + N; L.pos = S.pos}
+      T.prog.firstChild.style.width = (S.pos / N * 100) + '%'; T.prog.setAttribute('aria-valuenow', S.pos);
       T.roll.disabled = busy || S.over; T.menu.disabled = busy; T.end.disabled = busy || S.over
     }
 
@@ -1049,14 +2813,14 @@
       if (busy || S.over) return; busy = true; paint();
       const d = 1 + rnd(6);
       T.die.classList.add('roll'); const iv = setInterval(() => {T.die.textContent = DIE[rnd(6)]; sfx.roll()}, 90);
-      await sleep(800); clearInterval(iv); T.die.classList.remove('roll'); T.die.textContent = DIE[d - 1];
+      await sleep(800); clearInterval(iv); T.die.classList.remove('roll'); T.die.textContent = DIE[d - 1]; pop(T.die, 'land', 600);
       const from = S.pos, to = from + d; T.msg.textContent = `You rolled a ${d}.`;
       if (to > N) {toast(`Exact roll needed: you need ${N - from} or less`); return endTurn(false)}
-      for (let k = from + 1; k <= to; k++) {S.pos = k; place(k); hop(); sfx.hop(); await sleep(220)}
+      for (let k = from + 1; k <= to; k++) {S.pos = k; place(k); paint(); sfx.hop(); await sleep(220)}
       await sleep(200);
-      S.pend = {from}; save();                 // question is open: leaving now counts as a timeout
+      fx(to, 'land'); S.pend = {from}; save();                 // question is open: leaving now counts as a timeout
       const r = await ask(to, from);
-      if (!r.ok) {for (let k = to - 1; k >= from; k--) {place(k); hop(); await sleep(110)} }
+      if (!r.ok) {for (let k = to - 1; k >= from; k--) {place(k, 110); paint(); await sleep(110)} }
       paint();
       if (S.over) return finish();
       endTurn(r.ok && d === 6)
@@ -1064,7 +2828,7 @@
 
     function endTurn(extra) {
       if (extra) toast('You rolled a six. Roll again!'); else S.turn++;
-      busy = false; save(); T.msg.textContent = 'Roll the dice to move.'; paint()
+      busy = false; save(); T.msg.textContent = MSG; paint()
     }
 
     function pick(cat) {
@@ -1107,13 +2871,13 @@
           }
           if (S.over) record(); else save();
           bs.forEach((b, k) => {b.disabled = true; if (opts[k] === ans) b.classList.add('r'); else if (k === i) b.classList.add('w')}); ll.disabled = true;
-          (ok ? sfx.ok : sfx.bad)(); fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'bad');
+          (ok ? sfx.ok : sfx.bad)(); feedback(ok, tile, close.el, bs[opts.indexOf(ans)], pts, bonus); fb.hidden = false; fb.className = 'fb ' + (ok ? 'ok' : 'bad');
           const nb = h('button', {class: 'btn', onclick: () => {document.removeEventListener('keydown', key); close(); res({ok})}}, S.won ? 'Enter the Great Hall' : 'Continue');
-          fb.replaceChildren(h('strong', {}, ok ? `Correct · +${pts} points` : late ? "Time's up" : 'Not quite'),
-            ok ? null : h('p', {}, 'Answer: ' + ans),
-            ok ? null : h('p', {class: 'loss'}, S.lives > 0 ? `−1 life · ${S.lives} left` : 'No lives left'),
-            bonus ? h('p', {}, 'Three in a row · +10 bonus') : null,
-            h('p', {class: 'sub'}, ex), h('div', {class: 'row end'}, nb)); nb.focus()
+          fb.replaceChildren(...[h('strong', {}, ok ? `Correct · +${pts} points` : late ? "Time's up" : 'Not quite'),
+          ok ? null : h('p', {}, 'Answer: ' + ans),
+          ok ? null : h('p', {class: 'loss'}, S.lives > 0 ? `−1 life · ${S.lives} left` : 'No lives left'),
+          bonus ? h('p', {}, 'Three in a row · +10 bonus') : null,
+          h('p', {class: 'sub'}, ex), h('div', {class: 'row end'}, nb)].filter(Boolean)); nb.focus()
         };
         const end = Date.now() + SECS * 1000;
         iv = setInterval(() => {
@@ -1126,7 +2890,7 @@
     }
 
     function endEarly() {
-      if (busy) return; const close = modal(h('h2', {}, 'End the game?'), h('p', {}, 'Your current score will still be saved to the Hall of Fame.'),
+      if (busy) return; const close = modal(h('h2', {}, 'End the game?'), h('p', {}, 'Your score is kept in your stats, but only winners appear in the Hall of Fame.'),
         h('div', {class: 'row end'}, h('button', {class: 'btn ghost', onclick: () => close()}, 'Keep playing'), h('button', {class: 'btn', onclick: () => {close(); S.over = true; record(); finish()}}, 'End game')))
     }
 
@@ -1138,10 +2902,41 @@
           h('h1', {}, w ? 'The Great Hall awaits' : S.lost ? 'Out of lives' : 'Quest ended'),
           h('p', {class: 'sub'}, w ? `${S.name}, you made it in ${S.turn} turns.` : S.lost ? `You fell on tile ${S.pos} of ${N}.` : `You stopped on tile ${S.pos} of ${N}.`)),
         h('section', {class: 'panel'}, h('div', {class: 'results'}, [['Score', S.score], ['Turns', S.turn], ['Right', S.ok], ['Wrong', S.bad], ['Accuracy', t ? Math.round(S.ok / t * 100) + '%' : '—']].map(([k, v]) => h('div', {}, h('small', {}, k), h('strong', {}, v))))),
-        h('div', {class: 'row center'}, h('button', {class: 'btn', onclick: () => newGame(S.name)}, 'Play again'), h('button', {class: 'btn ghost', onclick: home}, 'Menu'))))
+        h('div', {class: 'row center'}, h('button', {class: 'btn', onclick: again}, 'Play again'), h('button', {class: 'btn ghost', onclick: home}, 'Menu'))));
+      finishFx(w)
     }
 
+    embers();
     boot();
+  </script>
+  <script>
+    (() => {
+      const intro = document.getElementById('cinemaIntro');
+      const skip = document.getElementById('cinemaSkip');
+      if (!intro) return;
+      let dismissed = false;
+      const dismiss = () => {
+        if (dismissed) return;
+        dismissed = true;
+        intro.classList.add('leaving');
+        window.setTimeout(() => intro.remove(), 1500);
+      };
+      if (skip) skip.addEventListener('click', dismiss);
+      window.setTimeout(dismiss, 6800);
+      document.addEventListener('keydown', e => {if (e.key === 'Escape') dismiss();}, {once: false});
+      // Make each game/menu change feel like a new cinematic scene.
+      const app = document.getElementById('app');
+      if (app && 'MutationObserver' in window) {
+        const observer = new MutationObserver(() => {
+          const scene = app.firstElementChild;
+          if (!scene) return;
+          scene.classList.remove('cinema-scene-in');
+          void scene.offsetWidth;
+          scene.classList.add('cinema-scene-in');
+        });
+        observer.observe(app, {childList: true});
+      }
+    })();
   </script>
 </body>
 
